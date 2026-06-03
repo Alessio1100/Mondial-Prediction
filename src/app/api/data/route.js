@@ -1,5 +1,7 @@
 // src/app/api/data/route.js
 
+export const dynamic = 'force-dynamic'; // <-- FONDAMENTALE PER DISATTIVARE LA CACHE DI VERCEL
+
 const REDIS_URL   = 'https://pro-opossum-113172.upstash.io';
 const REDIS_TOKEN = 'gQAAAAAAAboUAAIgcDEzOWNhYjNhNDY3MWU0NWMyOGFhMmM0MzMyMjIzNjI0Ng';
 const STATE_KEY   = 'mondiali2026_state';
@@ -18,7 +20,18 @@ async function redisGet(key) {
   });
   const json = await res.json();
   if (!json || json.result === null || json.result === undefined) return null;
-  try { return JSON.parse(json.result); } catch { return json.result; }
+  
+  let parsed = json.result;
+  
+  // Decodifica iterativamente per recuperare anche i vecchi salvataggi difettosi
+  while (typeof parsed === 'string') {
+    try { 
+      parsed = JSON.parse(parsed); 
+    } catch { 
+      break; 
+    }
+  }
+  return parsed;
 }
 
 async function redisSet(key, value) {
@@ -28,7 +41,8 @@ async function redisSet(key, value) {
       Authorization: `Bearer ${REDIS_TOKEN}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(JSON.stringify(value)),
+    // Rimosso il doppio JSON.stringify(JSON.stringify(...))
+    body: JSON.stringify(value),
   });
   const json = await res.json();
   if (json.error) throw new Error(json.error);
@@ -64,6 +78,7 @@ export async function POST(request) {
   }
 
   let current = await redisGet(STATE_KEY) || {};
+  if (typeof current !== 'object') current = {};
 
   switch (op) {
     case 'specials': {
