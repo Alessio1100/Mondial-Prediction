@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mondiali 2026 – Pronostici</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --gold: #f5c842;
+    --gold2: #e0a800;
+    --accent: #3b82f6;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; min-height: 100vh; overflow-x: hidden; }
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0d1a2e 100%); border-bottom: 1px solid var(--border2); padding: 0 24px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; }
+  .header-title { font-family: var(--font-display); font-size: 28px; letter-spacing: 2px; color: var(--gold); padding: 14px 0; flex: 0 0 auto; margin-right: 32px; }
+  .header-title span { color: var(--text); }
+  .nav { display: flex; gap: 2px; flex: 1; }
+  .nav-btn { padding: 10px 20px; background: transparent; border: none; color: var(--muted2); font-family: var(--font-body); font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .header-settings { padding: 8px 14px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--muted2); font-size: 18px; cursor: pointer; transition: all 0.15s; margin-left: 12px; }
+  .header-settings:hover { color: var(--gold); border-color: var(--gold); }
+  /* Il pulsante "Config" nella nav serve solo nella bottom-bar mobile */
+  .nav-btn-settings-mobile { display: none; }
+  .main { padding: 28px 24px; max-width: 1200px; margin: 0 auto; }
+  .screen { display: none; animation: fadeIn 0.2s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  select, input[type="text"], input[type="password"] { background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 14px; padding: 9px 12px; width: 100%; outline: none; transition: border-color 0.15s; }
+  select:focus, input[type="text"]:focus, input[type="password"]:focus { border-color: var(--accent); }
+  select option { background: #1a2235; }
+  .btn { padding: 9px 18px; border-radius: 8px; font-family: var(--font-body); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: var(--surface2); color: var(--text); white-space: nowrap; }
+  .btn:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--gold); color: #0a0e1a; border-color: var(--gold); font-weight: 600; }
+  .btn-primary:hover { background: var(--gold2); border-color: var(--gold2); color: #0a0e1a; }
+  .btn-danger { border-color: var(--red); color: var(--red); }
+  .btn-danger:hover { background: var(--red-bg); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .card-title { font-family: var(--font-display); font-size: 16px; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 14px; }
+  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .group-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .group-card-header { background: var(--surface2); padding: 7px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .group-letter { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+  .group-card-body { padding: 7px 9px; }
+  .standing-row { display: flex; align-items: center; gap: 9px; padding: 5px 7px; border-radius: 6px; margin-bottom: 3px; font-size: 13px; }
+  .standing-row:last-child { margin-bottom: 0; }
+  .standing-pos { width: 18px; height: 18px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted2); flex-shrink: 0; transition: all 0.15s; }
+  .standing-team { flex: 1; }
+  .standing-icon { font-size: 11px; flex-shrink: 0; }
+  .standing-pos.pos-correct { background: var(--green); color: #06210f; }
+  .standing-pos.pos-wrong { background: var(--red); color: #2a0707; }
+  .leaderboard { display: flex; flex-direction: column; gap: 8px; max-width: 600px; }
+  .lb-row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.15s; animation: slideIn 0.3s ease both; }
+  @keyframes slideIn { from { opacity:0; transform: translateX(-10px); } to { opacity:1; transform: translateX(0); } }
+  .lb-row:nth-child(1) { border-color: rgba(245,200,66,0.4); }
+  .lb-row:nth-child(2) { border-color: rgba(148,163,184,0.3); }
+  .lb-row:nth-child(3) { border-color: rgba(205,127,50,0.3); }
+  .lb-rank { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 17px; flex-shrink: 0; }
+  .rank-1 { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.4); }
+  .rank-2 { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
+  .rank-3 { background: rgba(205,127,50,0.1); color: #cd7f32; border: 1px solid rgba(205,127,50,0.3); }
+  .rank-n { background: var(--surface2); color: var(--muted2); border: 1px solid var(--border); }
+  .lb-name { flex: 1; font-weight: 500; font-size: 15px; }
+  .lb-pts { font-family: var(--font-display); font-size: 28px; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+  .lb-detail { font-size: 12px; color: var(--muted); text-align: right; }
+  .lb-bonus { font-size: 11px; color: var(--accent); margin-top: 2px; }
+  .specials-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-top: 14px; }
+  .special-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .special-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .special-icon { font-size: 20px; flex-shrink: 0; }
+  .special-label { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .special-value { font-size: 14px; font-weight: 500; }
+  .special-badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .badge-correct { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .badge-wrong { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .badge-pending { background: var(--surface2); color: var(--muted2); border: 1px solid var(--border2); }
+  .insert-group-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .insert-group-header { background: var(--surface2); padding: 7px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .insert-group-body { padding: 9px; }
+  .insert-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .insert-row:last-child { margin-bottom: 0; }
+  .insert-pos { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted2); flex-shrink: 0; }
+  .insert-row input { padding: 6px 10px; font-size: 13px; border-radius: 6px; }
+  .settings-section { margin-bottom: 24px; }
+  .players-list { display: flex; flex-direction: column; gap: 6px; }
+  .player-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
+  .player-item-name { flex: 1; font-size: 14px; }
+  .api-status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
+  .status-ok { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .status-err { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .status-idle { background: var(--surface2); color: var(--muted2); border: 1px solid var(--border2); }
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+  .alert-warn { background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.2); color: #f5c842; }
+  .alert-info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); color: #93c5fd; }
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 8px; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 9999; white-space: nowrap; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .empty { text-align: center; padding: 48px 0; color: var(--muted); }
+  .row { display: flex; gap: 10px; align-items: flex-end; }
+  .flex-1 { flex: 1; }
+  .mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}
+  a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+  code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 12px; color: var(--gold); }
+  /* ===== TABLET (641-980px): griglia gironi più stretta ===== */
+  @media (max-width: 980px) {
+    .groups-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    .main { max-width: 100%; }
+  }
+
+  /* ===== MOBILE (≤640px): vista dedicata stile app ===== */
+  @media (max-width: 640px) {
+    body { font-size: 16px; padding-bottom: 72px; } /* spazio per la bottom nav */
+
+    /* Header compatto: solo titolo + ingranaggio */
+    .header { padding: 10px 16px; justify-content: space-between; }
+    .header-title { font-size: 24px; letter-spacing: 1.5px; margin-right: 0; padding: 6px 0; }
+
+    /* La nav superiore diventa una bottom tab bar fissa */
+    .nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      width: 100%; flex: none; gap: 0; z-index: 200;
+      background: var(--surface); border-top: 1px solid var(--border2);
+      padding: 0; padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    .nav-btn {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 10px 4px 8px; font-size: 11px; border-bottom: none;
+      border-top: 2px solid transparent;
+    }
+    .nav-btn.active { border-top-color: var(--gold); border-bottom: none; background: var(--surface2); }
+    .nav-btn .nav-emoji { font-size: 20px; line-height: 1; }
+    .nav-btn .nav-label { font-size: 10px; font-weight: 500; }
+
+    .main { padding: 16px 14px 24px; }
+
+    /* Selettore giocatore a tutta larghezza, più alto da toccare */
+    .row.mb-16 { max-width: 100% !important; }
+    select, input[type="text"], input[type="password"] {
+      font-size: 16px; padding: 12px 14px; /* 16px evita lo zoom automatico iOS */
+    }
+
+    /* Gironi: una colonna sola, leggibilità massima */
+    .groups-grid { grid-template-columns: 1fr; gap: 12px; }
+    .group-card-header { padding: 10px 16px; }
+    .group-letter { font-size: 24px; }
+    .standing-row { padding: 9px 10px; font-size: 15px; gap: 11px; }
+    .standing-pos { width: 22px; height: 22px; font-size: 12px; }
+
+    /* Form inserimento: campi più alti */
+    .insert-group-header { padding: 10px 16px; }
+    .insert-row { gap: 10px; margin-bottom: 8px; }
+    .insert-pos { width: 26px; height: 26px; font-size: 12px; }
+    .insert-row input { padding: 11px 12px; font-size: 16px; }
+
+    /* Classifica: righe più ariose */
+    .lb-row { padding: 14px 16px; gap: 12px; }
+    .lb-rank { width: 36px; height: 36px; font-size: 18px; }
+    .lb-name { font-size: 16px; }
+    .lb-pts { font-size: 30px; }
+
+    /* Card e bottoni full-width comodi */
+    .card { padding: 16px; }
+    .btn { padding: 12px 18px; font-size: 15px; }
+    .row { flex-wrap: wrap; }
+    .row .btn { flex: 1; }
+
+    /* I form a due colonne (speciali, ricerca) si impilano */
+    .form-row, .row[style*="align-items:flex-end"] { flex-direction: column; align-items: stretch; }
+
+    .header-settings { display: none; } /* su mobile Config è nella bottom bar */
+    .nav-btn-settings-mobile { display: flex; }
+
+    #toast { bottom: 84px; } /* sopra la bottom nav */
+  }
+
+  /* ===== MOBILE PICCOLO (≤360px) ===== */
+  @media (max-width: 360px) {
+    .header-title { font-size: 20px; }
+    .nav-btn .nav-label { font-size: 9px; }
+    .standing-team { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<header class="header">
+  <div class="header-title">WORLD CUP <span>2026</span></div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showScreen('overview',this)"><span class="nav-emoji">👁</span><span class="nav-label">Overview</span></button>
+    <button class="nav-btn" onclick="showScreen('classifica',this)"><span class="nav-emoji">🏆</span><span class="nav-label">Classifica</span></button>
+    <button class="nav-btn" onclick="showScreen('inserimento',this)"><span class="nav-emoji">✏️</span><span class="nav-label">Pronostici</span></button>
+    <button class="nav-btn nav-btn-settings-mobile" onclick="showScreen('settings',this)"><span class="nav-emoji">⚙️</span><span class="nav-label">Config</span></button>
+  </nav>
+  <button class="header-settings" onclick="showScreen('settings',null)" title="Impostazioni">⚙</button>
+</header>
+<main class="main">
+  <section id="screen-overview" class="screen active">
+    <div class="row mb-16" style="align-items:flex-end;max-width:320px">
+      <div class="flex-1"><div class="label">Giocatore</div>
+        <select id="overview-player" onchange="renderOverview()"><option value="">— seleziona —</option></select>
+      </div>
+    </div>
+    <div id="overview-content"></div>
+  </section>
+  <section id="screen-classifica" class="screen">
+    <div id="classifica-content"></div>
+  </section>
+  <section id="screen-inserimento" class="screen">
+    <div class="row mb-16" style="align-items:flex-end;max-width:320px">
+      <div class="flex-1"><div class="label">Giocatore</div>
+        <select id="insert-player" onchange="renderInsertForm()"><option value="">— seleziona —</option></select>
+      </div>
+    </div>
+    <div id="insert-content"></div>
+  </section>
+  <section id="screen-settings" class="screen">
+    <div class="settings-section"><div class="card">
+      <div class="card-title">Classifiche reali — football-data.org</div>
+      <div class="row mt-4">
+        <button class="btn btn-primary" onclick="testAndFetch()">🔄 Sincronizza dall'API</button>
+      </div>
+      <div id="api-status" class="api-status-badge status-idle">⚪ Pronto per la sincronizzazione</div>
+      <div class="divider"></div>
+      <p style="font-size:13px;color:var(--muted2)">Le classifiche si sincronizzano <strong>automaticamente ogni volta che apri il sito</strong>. I dati sono salvati su <strong>Upstash Redis</strong> e sono identici su tutti i dispositivi in tempo reale. Se la connessione fallisce, usa l'inserimento manuale qui sotto.</p>
+      <div class="mt-12">
+        <div class="label" style="margin-top:12px;margin-bottom:10px">Classifiche reali (inserimento manuale)</div>
+        <div id="manual-standings-form"></div>
+        <button class="btn btn-primary mt-12" onclick="saveManualStandings()" style="width:100%">💾 Salva classifiche manuali</button>
+      </div>
+    </div></div>
+    <div class="settings-section"><div class="card">
+      <div class="card-title">Giocatori</div>
+      <div class="row">
+        <input type="text" id="new-player-input" placeholder="Nome giocatore..." class="flex-1" onkeydown="if(event.key==='Enter')addPlayer()"/>
+        <button class="btn btn-primary" onclick="addPlayer()">Aggiungi</button>
+      </div>
+      <div class="mt-12" id="players-list"></div>
+    </div></div>
+    <div class="settings-section"><div class="card">
+      <div class="card-title">Risultati speciali</div>
+      <p style="font-size:13px;color:var(--muted2);margin-bottom:14px">Inserisci il vincitore reale e il capocannoniere reale per i bonus punti (+3 pt ciascuno).</p>
+      <div class="row">
+        <div class="flex-1"><div class="label">Nazionale vincitrice (reale)</div><input type="text" id="real-winner" placeholder="es. Brasile"/></div>
+        <div class="flex-1"><div class="label">Capocannoniere (reale)</div><input type="text" id="real-scorer" placeholder="es. Mbappé"/></div>
+      </div>
+      <button class="btn btn-primary mt-12" onclick="saveRealSpecials()" style="width:100%">💾 Salva risultati speciali</button>
+    </div></div>
+  </section>
+</main>
+
+<script>
+const GROUPS = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+const POSITIONS = 4;
+const STORAGE_KEY = 'wc2026_v3';
+
+// ── HARDCODED PREDICTIONS ──────────────────────────────────────────────────────
+// Normalizzazione nomi per confronto (tutti lowercase, alias risolti al caricamento)
+const HARDCODED = {
+  Valerio: {
+    A:['Rep Ceca','Messico','Corea del Sud','Sudafrica'],
+    B:['Svizzera','Canada','Bosnia','Qatar'],
+    C:['Brasile','Scozia','Marocco','Haiti'],
+    D:['Turchia','USA','Paraguay','Australia'],
+    E:['Germania','Costa d\'Avorio','Ecuador','Curacao'],
+    F:['Olanda','Svezia','Giappone','Tunisia'],
+    G:['Belgio','Egitto','Nuova Zelanda','Iran'],
+    H:['Spagna','Uruguay','Capo Verde','Arabia Saudita'],
+    I:['Francia','Senegal','Norvegia','Iraq'],
+    J:['Argentina','Austria','Algeria','Giordania'],
+    K:['Portogallo','Colombia','Uzbekistan','Congo'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  },
+  Giulio: {
+    A:['Rep Ceca','Corea del Sud','Messico','Sudafrica'],
+    B:['Svizzera','Canada','Bosnia','Qatar'],
+    C:['Marocco','Brasile','Scozia','Haiti'],
+    D:['Turchia','USA','Paraguay','Australia'],
+    E:['Germania','Costa d\'Avorio','Ecuador','Curacao'],
+    F:['Olanda','Giappone','Tunisia','Svezia'],
+    G:['Belgio','Iran','Egitto','Nuova Zelanda'],
+    H:['Spagna','Uruguay','Arabia Saudita','Capo Verde'],
+    I:['Norvegia','Francia','Senegal','Iraq'],
+    J:['Argentina','Austria','Algeria','Giordania'],
+    K:['Portogallo','Colombia','Uzbekistan','Congo'],
+    L:['Inghilterra','Ghana','Croazia','Panama']
+  },
+  Andrea: {
+    A:['Rep Ceca','Messico','Sudafrica','Corea del Sud'],
+    B:['Bosnia','Svizzera','Canada','Qatar'],
+    C:['Brasile','Marocco','Scozia','Haiti'],
+    D:['Turchia','USA','Australia','Paraguay'],
+    E:['Germania','Costa d\'Avorio','Ecuador','Curacao'],
+    F:['Olanda','Svezia','Giappone','Tunisia'],
+    G:['Belgio','Egitto','Nuova Zelanda','Iran'],
+    H:['Spagna','Uruguay','Arabia Saudita','Capo Verde'],
+    I:['Francia','Norvegia','Senegal','Iraq'],
+    J:['Argentina','Austria','Algeria','Giordania'],
+    K:['Portogallo','Colombia','Congo','Uzbekistan'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  },
+  Alessio: {
+    A:['Corea del Sud','Messico','Rep Ceca','Sudafrica'],
+    B:['Svizzera','Canada','Bosnia','Qatar'],
+    C:['Brasile','Marocco','Scozia','Haiti'],
+    D:['Turchia','USA','Australia','Paraguay'],
+    E:['Germania','Costa d\'Avorio','Ecuador','Curacao'],
+    F:['Giappone','Olanda','Svezia','Tunisia'],
+    G:['Egitto','Iran','Belgio','Nuova Zelanda'],
+    H:['Spagna','Uruguay','Arabia Saudita','Capo Verde'],
+    I:['Francia','Norvegia','Senegal','Iraq'],
+    J:['Argentina','Algeria','Austria','Giordania'],
+    K:['Portogallo','Uzbekistan','Colombia','Congo'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  },
+  Ascanio: {
+    A:['Messico','Corea del Sud','Rep Ceca','Sudafrica'],
+    B:['Svizzera','Bosnia','Canada','Qatar'],
+    C:['Brasile','Scozia','Marocco','Haiti'],
+    D:['USA','Turchia','Australia','Paraguay'],
+    E:['Germania','Costa d\'Avorio','Ecuador','Curacao'],
+    F:['Olanda','Giappone','Svezia','Tunisia'],
+    G:['Belgio','Egitto','Nuova Zelanda','Iran'],
+    H:['Spagna','Uruguay','Capo Verde','Arabia Saudita'],
+    I:['Norvegia','Francia','Senegal','Iraq'],
+    J:['Argentina','Austria','Algeria','Giordania'],
+    K:['Portogallo','Congo','Colombia','Uzbekistan'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  },
+  Marco: {
+    A:['Rep Ceca','Messico','Corea del Sud','Sudafrica'],
+    B:['Svizzera','Bosnia','Canada','Qatar'],
+    C:['Brasile','Marocco','Scozia','Haiti'],
+    D:['USA','Turchia','Paraguay','Australia'],
+    E:['Germania','Ecuador','Costa d\'Avorio','Curacao'],
+    F:['Olanda','Giappone','Svezia','Tunisia'],
+    G:['Belgio','Iran','Egitto','Nuova Zelanda'],
+    H:['Spagna','Uruguay','Arabia Saudita','Capo Verde'],
+    I:['Francia','Senegal','Norvegia','Iraq'],
+    J:['Argentina','Algeria','Austria','Giordania'],
+    K:['Portogallo','Colombia','Congo','Uzbekistan'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  },
+  Federico: {
+    A:['Messico','Corea del Sud','Rep Ceca','Sudafrica'],
+    B:['Svizzera','Canada','Bosnia','Qatar'],
+    C:['Brasile','Marocco','Scozia','Haiti'],
+    D:['USA','Turchia','Paraguay','Australia'],
+    E:['Germania','Ecuador','Costa d\'Avorio','Curacao'],
+    F:['Olanda','Giappone','Svezia','Tunisia'],
+    G:['Belgio','Egitto','Iran','Nuova Zelanda'],
+    H:['Spagna','Uruguay','Arabia Saudita','Capo Verde'],
+    I:['Francia','Senegal','Norvegia','Iraq'],
+    J:['Argentina','Austria','Algeria','Giordania'],
+    K:['Portogallo','Colombia','Uzbekistan','Congo'],
+    L:['Inghilterra','Croazia','Ghana','Panama']
+  }
+};
+
+const HARDCODED_PLAYERS = Object.keys(HARDCODED);
+
+// ── CLASSIFICHE DI DEFAULT (ordine alfabetico, segnaposto fino ai dati reali) ──
+const DEFAULT_STANDINGS = {
+  A:['Corea del Sud','Messico','Rep Ceca','Sudafrica'],
+  B:['Bosnia','Canada','Qatar','Svizzera'],
+  C:['Brasile','Haiti','Marocco','Scozia'],
+  D:['Australia','Paraguay','Turchia','USA'],
+  E:["Costa d'Avorio",'Curacao','Ecuador','Germania'],
+  F:['Giappone','Olanda','Svezia','Tunisia'],
+  G:['Belgio','Egitto','Iran','Nuova Zelanda'],
+  H:['Arabia Saudita','Capo Verde','Spagna','Uruguay'],
+  I:['Francia','Iraq','Norvegia','Senegal'],
+  J:['Algeria','Argentina','Austria','Giordania'],
+  K:['Colombia','Congo','Portogallo','Uzbekistan'],
+  L:['Croazia','Ghana','Inghilterra','Panama']
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+let state = {
+  players: [],           // contiene HARDCODED_PLAYERS + eventuali nuovi
+  predictions: {},
+  specials: {},
+  realStandings: {},
+  realSpecials: { winner:'', scorer:'' },
+  lastSync: null
+};
+
+// Normalizza lo stato: garantisce giocatori hardcoded e classifiche di default
+function ensureDefaults() {
+  HARDCODED_PLAYERS.forEach(p => {
+    if (!state.players.includes(p)) state.players.push(p);
+    if (!state.predictions[p]) state.predictions[p] = JSON.parse(JSON.stringify(HARDCODED[p]));
+    if (!state.specials[p]) state.specials[p] = { winner:'', scorer:'' };
+  });
+  if (!state.realStandings || Object.keys(state.realStandings).length === 0) {
+    state.realStandings = JSON.parse(JSON.stringify(DEFAULT_STANDINGS));
+  }
+}
+
+// localStorage: SOLO cache di lettura per il primo render immediato.
+// Non viene mai usato per scrivere su Redis — evita dati stale.
+function saveLocal() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function loadLocal() {
+  try {
+    const d = localStorage.getItem(STORAGE_KEY);
+    if (d) state = { ...state, ...JSON.parse(d) };
+  } catch(e) {}
+  ensureDefaults();
+}
+
+// Patch granulare verso Redis: scrive SOLO il campo indicato.
+// Non tocca mai i dati degli altri utenti.
+async function patch(op, payload) {
+  try {
+    await fetch('/api/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ op, payload })
+    });
+  } catch(e) { /* offline: i dati locali sono già aggiornati in memoria */ }
+  saveLocal(); // aggiorna la cache locale DOPO aver tentato il server
+}
+
+// Carica da Redis: il server è la fonte di verità assoluta.
+// Sostituisce COMPLETAMENTE lo stato locale con quello del server.
+// Restituisce true se qualcosa è cambiato (per triggare il re-render).
+async function loadFromServer() {
+  try {
+    const res = await fetch('/api/data');
+    if (!res.ok) return false;
+    const remote = await res.json();
+
+    if (remote && Object.keys(remote).length > 0) {
+      const before = JSON.stringify({
+        specials: state.specials,
+        predictions: state.predictions,
+        players: state.players,
+        realStandings: state.realStandings,
+        realSpecials: state.realSpecials
+      });
+      // Il server vince su tutto — nessun merge, sostituzione diretta
+      state = { ...state, ...remote };
+      ensureDefaults();
+      saveLocal();
+      const after = JSON.stringify({
+        specials: state.specials,
+        predictions: state.predictions,
+        players: state.players,
+        realStandings: state.realStandings,
+        realSpecials: state.realSpecials
+      });
+      return before !== after; // true = ci sono novità da mostrare
+    } else {
+      // Redis vuoto — primo avvio assoluto: inizializza con i default
+      ensureDefaults();
+      // Scrive lo stato iniziale su Redis (solo una volta)
+      try {
+        await fetch('/api/data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ op: 'full', payload: state })
+        });
+      } catch(e) {}
+      saveLocal();
+      return true;
+    }
+  } catch(e) {
+    return false; // offline: usa i dati in memoria senza toccare nulla
+  }
+}
+
+// ── REAL-TIME PUSH via Server-Sent Events ─────────────────────────────────────
+let _lastKnownTs = '0';
+let _evtSource = null;
+
+function connectSSE() {
+  if (_evtSource) { _evtSource.close(); _evtSource = null; }
+  _evtSource = new EventSource(`/api/events?ts=${encodeURIComponent(_lastKnownTs)}`);
+
+  _evtSource.onmessage = async (e) => {
+    try {
+      const { ts } = JSON.parse(e.data);
+      if (ts && ts !== _lastKnownTs) {
+        _lastKnownTs = ts;
+        const changed = await loadFromServer();
+        if (changed) { refreshCurrentScreen(); showSyncIndicator(); }
+      }
+    } catch {}
+  };
+
+  _evtSource.onerror = () => {
+    _evtSource.close();
+    _evtSource = null;
+    setTimeout(connectSSE, 2000); // riconnetti dopo 2s
+  };
+}
+
+function showSyncIndicator() {
+  const t = document.querySelector('.header-title');
+  if (!t) return;
+  t.style.transition = 'opacity 0.3s';
+  t.style.opacity = '0.4';
+  setTimeout(() => { t.style.opacity = '1'; }, 300);
+  setTimeout(() => { t.style.opacity = '0.4'; }, 600);
+  setTimeout(() => { t.style.opacity = '1'; }, 900);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg, ok=true) {
+  const el = document.getElementById('toast');
+  el.textContent = (ok?'✓ ':'✗ ')+msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2500);
+}
+function getPlayerPrediction(p) {
+  if (!state.predictions[p]) { state.predictions[p]={}; GROUPS.forEach(g=>state.predictions[p][g]=['','','','']); }
+  return state.predictions[p];
+}
+function getPlayerSpecials(p) {
+  if (!state.specials[p]) state.specials[p]={winner:'',scorer:''};
+  return state.specials[p];
+}
+function normTeam(s) { return String(s||'').trim().toLowerCase(); }
+
+function calcScore(player) {
+  const pred = state.predictions[player]||{};
+  const real = state.realStandings||{};
+  const sp   = state.specials[player]||{};
+  const rsp  = state.realSpecials||{};
+  let pts=0, correct=0, filled=0;
+  GROUPS.forEach(g=>{
+    const pTeams=pred[g]||[];
+    const rTeams=real[g]||[];
+    pTeams.forEach((team,i)=>{
+      if(!team) return;
+      filled++;
+      if(rTeams[i] && normTeam(rTeams[i])===normTeam(team)){pts++;correct++;}
+    });
+  });
+  let bonus=0;
+  if(sp.winner&&rsp.winner&&normTeam(sp.winner)===normTeam(rsp.winner)) bonus+=3;
+  if(sp.scorer&&rsp.scorer&&normTeam(sp.scorer)===normTeam(rsp.scorer)) bonus+=3;
+  return {pts:pts+bonus, gironi:pts, bonus, correct, filled};
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function showScreen(name, btn) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='overview'){populateSelect('overview-player');renderOverview();}
+  if(name==='classifica') renderLeaderboard();
+  if(name==='inserimento'){populateSelect('insert-player');renderInsertForm();}
+  if(name==='settings') renderSettings();
+}
+function populateSelect(id) {
+  const sel=document.getElementById(id);
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— seleziona —</option>';
+  const markLock = (id === 'insert-player');
+  state.players.forEach(p=>{
+    const o=document.createElement('option');
+    o.value=p;
+    if(markLock){
+      const g=hasGroupPrediction(p), s=hasSpecialsPrediction(p);
+      if(g&&s) o.textContent = p+' 🔒';
+      else if(g&&!s) o.textContent = p+' ✏️ (speciali da inserire)';
+      else o.textContent = p+' ✏️';
+    } else {
+      o.textContent=p;
+    }
+    if(p===cur) o.selected=true;
+    sel.appendChild(o);
+  });
+}
+
+// ── FLAG MAP (codici ISO per immagini flagcdn.com) ─────────────────────────────
+const FLAGS = {
+  // Girone A
+  'rep ceca':'cz','repubblica ceca':'cz','czech republic':'cz',
+  'messico':'mx','mexico':'mx',
+  'corea del sud':'kr','corea':'kr','korea':'kr','south korea':'kr',
+  'sudafrica':'za','south africa':'za',
+  // Girone B
+  'svizzera':'ch','switzerland':'ch',
+  'canada':'ca',
+  'bosnia':'ba','bosnia erzegovina':'ba',
+  'qatar':'qa',
+  // Girone C
+  'brasile':'br','brazil':'br',
+  'scozia':'gb-sct','scotland':'gb-sct',
+  'marocco':'ma','morocco':'ma',
+  'haiti':'ht',
+  // Girone D
+  'turchia':'tr','turkey':'tr',
+  'usa':'us','stati uniti':'us','united states':'us',
+  'paraguay':'py',
+  'australia':'au',
+  // Girone E
+  "costa d'avorio":'ci','costa davorio':'ci','ivory coast':'ci','costa':'ci',
+  'germania':'de','germany':'de',
+  'ecuador':'ec',
+  'curacao':'cw','curaçao':'cw',
+  // Girone F
+  'olanda':'nl','paesi bassi':'nl','netherlands':'nl','planda':'nl',
+  'svezia':'se','sweden':'se',
+  'giappone':'jp','japan':'jp',
+  'tunisia':'tn',
+  // Girone G
+  'belgio':'be','belgium':'be',
+  'egitto':'eg','egypt':'eg',
+  'nuova zelanda':'nz','new zealand':'nz',
+  'iran':'ir',
+  // Girone H
+  'spagna':'es','spain':'es',
+  'uruguay':'uy',
+  'capo verde':'cv','cape verde':'cv',
+  'arabia saudita':'sa','arabia':'sa','saudi arabia':'sa',
+  // Girone I
+  'francia':'fr','france':'fr',
+  'senegal':'sn',
+  'norvegia':'no','novergia':'no','norway':'no',
+  'iraq':'iq',
+  // Girone J
+  'argentina':'ar',
+  'austria':'at',
+  'algeria':'dz',
+  'giordania':'jo','jordan':'jo',
+  // Girone K
+  'portogallo':'pt','portugal':'pt',
+  'colombia':'co',
+  'uzbekistan':'uz',
+  'congo':'cg',
+  // Girone L
+  'inghilterra':'gb-eng','england':'gb-eng',
+  'croazia':'hr','croatia':'hr',
+  'ghana':'gh',
+  'panama':'pa'
+};
+function flagCode(name) {
+  if(!name) return '';
+  return FLAGS[name.trim().toLowerCase()] || '';
+}
+function flagImg(name, h=14) {
+  const code = flagCode(name);
+  if(!code) return '';
+  return `<img src="https://flagcdn.com/h20/${code}.png" srcset="https://flagcdn.com/h40/${code}.png 2x" alt="" style="height:${h}px;width:${Math.round(h*1.45)}px;object-fit:cover;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 0.5px rgba(0,0,0,0.3)" loading="lazy"/>`;
+}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────────
+function renderOverview() {
+  const player=document.getElementById('overview-player').value;
+  const cont=document.getElementById('overview-content');
+  if(!player){
+    cont.innerHTML=`<div class="empty"><svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#334155"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Seleziona un giocatore per vedere i suoi pronostici</p></div>`;
+    return;
+  }
+  const pred=state.predictions[player]||{};
+  const real=state.realStandings||{};
+  const sp=getPlayerSpecials(player);
+  const rsp=state.realSpecials||{};
+  const hasReal=Object.keys(real).length>0;
+
+  let html='<div class="groups-grid">';
+  GROUPS.forEach(g=>{
+    const pTeams=pred[g]||['','','',''];
+    const rTeams=real[g]||[];
+    html+=`<div class="group-card"><div class="group-card-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span></div><div class="group-card-body">`;
+    for(let i=0;i<POSITIONS;i++){
+      const team=pTeams[i]||'';
+      let posCls='',icon='';
+      if(team&&hasReal&&rTeams[i]){
+        if(normTeam(rTeams[i])===normTeam(team)){posCls='pos-correct';icon=`<span class="standing-icon" style="color:var(--green)">✓</span>`;}
+        else{posCls='pos-wrong';icon=`<span class="standing-icon" style="color:var(--red)">✗</span>`;}
+      }
+      const f=team?flagImg(team,14):'';
+      html+=`<div class="standing-row"><div class="standing-pos ${posCls}">${i+1}</div>${f||'<span style="width:20px;flex-shrink:0"></span>'}<div class="standing-team">${team?esc(team):'—'}</div>${icon}</div>`;
+    }
+    html+='</div></div>';
+  });
+  html+='</div>';
+
+  // Specials
+  const winnerPill=sp.winner?(rsp.winner?(normTeam(sp.winner)===normTeam(rsp.winner)?`<span class="special-badge badge-correct">✓ Corretto</span>`:`<span class="special-badge badge-wrong">✗ Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
+  const scorerPill=sp.scorer?(rsp.scorer?(normTeam(sp.scorer)===normTeam(rsp.scorer)?`<span class="special-badge badge-correct">✓ Corretto</span>`:`<span class="special-badge badge-wrong">✗ Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
+  html+=`<div class="specials-card"><div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Pronostici speciali</div>
+    <div class="special-row"><span class="special-icon">🏆</span><div><div class="special-label">Nazionale vincitrice</div><div class="special-value">${sp.winner?esc(sp.winner):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${winnerPill}</div>
+    <div class="special-row"><span class="special-icon">⚽</span><div><div class="special-label">Miglior marcatore</div><div class="special-value">${sp.scorer?esc(sp.scorer):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${scorerPill}</div>
+  </div>`;
+  cont.innerHTML=html;
+}
+
+// ── LEADERBOARD ───────────────────────────────────────────────────────────────
+function renderLeaderboard() {
+  const cont=document.getElementById('classifica-content');
+  if(!state.players.length){cont.innerHTML=`<div class="empty"><p>Nessun giocatore configurato.</p></div>`;return;}
+  const hasReal=Object.keys(state.realStandings).length>0;
+  let html='';
+  if(!hasReal) html+=`<div class="alert alert-warn">⚠ Classifiche reali non ancora disponibili. I punteggi mostrano 0 pt. Vai in ⚙ per sincronizzare o inserire manualmente.</div>`;
+  const scores=state.players.map(p=>({name:p,...calcScore(p)}));
+  scores.sort((a,b)=>b.pts-a.pts||b.correct-a.correct);
+  html+='<div class="leaderboard">';
+  scores.forEach((s,i)=>{
+    const rankCls=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+    const delay=`animation-delay:${i*50}ms`;
+    const bonusTxt=s.bonus>0?`<div class="lb-bonus">+${s.bonus} pt bonus speciali</div>`:'';
+    html+=`<div class="lb-row" style="${delay}">
+      <div class="lb-rank ${rankCls}">${i+1}</div>
+      <div><div class="lb-name">${esc(s.name)}</div><div class="lb-detail">${s.correct}/${s.filled} posizioni corrette</div>${bonusTxt}</div>
+      <div style="text-align:right;margin-left:auto"><div class="lb-pts">${s.pts}</div><div class="lb-detail">punti</div></div>
+    </div>`;
+  });
+  html+='</div>';
+  cont.innerHTML=html;
+}
+
+// ── INSERT FORM ───────────────────────────────────────────────────────────────
+function hasGroupPrediction(player) {
+  const pred = state.predictions[player] || {};
+  return GROUPS.some(g => (pred[g]||[]).some(t => t && t.trim()));
+}
+function hasSpecialsPrediction(player) {
+  const sp = state.specials[player] || {};
+  return (sp.winner && sp.winner.trim()) || (sp.scorer && sp.scorer.trim());
+}
+function hasPrediction(player) {
+  return hasGroupPrediction(player) || hasSpecialsPrediction(player);
+}
+
+function renderInsertForm() {
+  const player=document.getElementById('insert-player').value;
+  const cont=document.getElementById('insert-content');
+  if(!player){cont.innerHTML=`<div class="empty"><p>Seleziona un giocatore per inserire i suoi pronostici</p></div>`;return;}
+  const pred=getPlayerPrediction(player);
+  const sp=getPlayerSpecials(player);
+  const groupsLocked = hasGroupPrediction(player);
+  const specialsLocked = hasSpecialsPrediction(player);
+  const gDis = groupsLocked ? 'disabled' : '';
+  const sDis = specialsLocked ? 'disabled' : '';
+
+  let html='';
+  // Banner gironi
+  if(groupsLocked && !specialsLocked){
+    html += `<div class="alert alert-info">🔒 I pronostici dei <strong>gironi</strong> di ${esc(player)} sono bloccati. Puoi ancora inserire i <strong>pronostici speciali</strong> qui sotto. 👇</div>`;
+  } else if(groupsLocked && specialsLocked){
+    html += `<div class="alert alert-info">🔒 <strong>${esc(player)}</strong> ha completato tutti i pronostici. Sono in sola lettura.</div>`;
+  } else {
+    html += `<div class="alert alert-warn">✏️ Inserisci i pronostici dei gironi di <strong>${esc(player)}</strong>. Una volta salvati non potranno più essere modificati.</div>`;
+  }
+
+  html+=`<div class="groups-grid" id="insert-grid">`;
+  GROUPS.forEach(g=>{
+    const teams=pred[g]||['','','',''];
+    html+=`<div class="insert-group-card"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span>${groupsLocked?'<span style="margin-left:auto;font-size:13px">🔒</span>':''}</div><div class="insert-group-body">`;
+    for(let i=0;i<POSITIONS;i++){
+      const v=teams[i]||'';
+      const oninput = groupsLocked ? '' : `oninput="updatePredField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"`;
+      html+=`<div class="insert-row"><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" ${gDis} ${oninput} style="${groupsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>`;
+    }
+    html+='</div></div>';
+  });
+  html+=`</div>`;
+
+  // Card speciali
+  html+=`<div class="card mt-16" style="max-width:560px">
+    <div class="card-title">Pronostici Speciali ${specialsLocked?'🔒':''}</div>
+    <div class="row">
+      <div class="flex-1"><div class="label">🏆 Nazionale vincitrice</div><input type="text" id="sp-winner" placeholder="es. Brasile" value="${esc(sp.winner||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
+      <div class="flex-1"><div class="label">⚽ Miglior marcatore</div><input type="text" id="sp-scorer" placeholder="es. Mbappé" value="${esc(sp.scorer||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
+    </div>
+  </div>`;
+
+  // Pulsanti salvataggio: separati per gironi e speciali
+  const buttons = [];
+  if(!groupsLocked) buttons.push(`<button class="btn btn-primary mt-16" onclick="saveGroups()" style="width:100%;max-width:560px;padding:13px;font-size:15px">💾 Salva pronostici gironi di ${esc(player)}</button>`);
+  if(!specialsLocked) buttons.push(`<button class="btn btn-primary mt-12" onclick="saveSpecials()" style="width:100%;max-width:560px;padding:13px;font-size:15px">💾 Salva pronostici speciali di ${esc(player)}</button>`);
+  html += buttons.join('');
+
+  cont.innerHTML=html;
+}
+
+function updatePredField(el) {
+  const player=document.getElementById('insert-player').value;
+  if(!player) return;
+  if(!state.predictions[player]) state.predictions[player]={};
+  const g=el.dataset.group;
+  if(!state.predictions[player][g]) state.predictions[player][g]=['','','',''];
+  state.predictions[player][g][parseInt(el.dataset.pos)]=el.value.trim();
+}
+
+function saveGroups() {
+  const player=document.getElementById('insert-player').value;
+  if(!player) return;
+  patch('groups', { player, predictions: state.predictions[player] });
+  toast('Pronostici gironi di '+player+' salvati');
+  renderInsertForm();
+  populateSelect('insert-player');
+}
+
+function saveSpecials() {
+  const player=document.getElementById('insert-player').value;
+  if(!player) return;
+  const w=document.getElementById('sp-winner');
+  const s=document.getElementById('sp-scorer');
+  if(!state.specials[player]) state.specials[player]={};
+  if(w) state.specials[player].winner=w.value.trim();
+  if(s) state.specials[player].scorer=s.value.trim();
+  patch('specials', { player, winner: state.specials[player].winner, scorer: state.specials[player].scorer });
+  toast('Pronostici speciali di '+player+' salvati');
+  renderInsertForm();
+  populateSelect('insert-player');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function renderSettings() {
+  const pl=document.getElementById('players-list');
+  if(!state.players.length){pl.innerHTML=`<p style="font-size:13px;color:var(--muted)">Nessun giocatore.</p>`;}
+  else{pl.innerHTML=`<div class="players-list">${state.players.map((p,i)=>`<div class="player-item"><span class="player-item-name">${esc(p)}</span>${!HARDCODED_PLAYERS.includes(p)?`<button class="btn btn-danger" style="padding:4px 10px;font-size:12px" onclick="removePlayer(${i})">✕</button>`:''}</div>`).join('')}</div>`;}
+  document.getElementById('real-winner').value=state.realSpecials?.winner||'';
+  document.getElementById('real-scorer').value=state.realSpecials?.scorer||'';
+  renderManualStandingsForm();
+}
+
+function renderManualStandingsForm() {
+  const cont=document.getElementById('manual-standings-form');
+  let html='<div class="groups-grid">';
+  GROUPS.forEach(g=>{
+    const rTeams=state.realStandings[g]||['','','',''];
+    html+=`<div class="insert-group-card"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span></div><div class="insert-group-body">`;
+    for(let i=0;i<POSITIONS;i++){
+      const v=rTeams[i]||'';
+      html+=`<div class="insert-row"><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" oninput="updateManualField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"/></div>`;
+    }
+    html+='</div></div>';
+  });
+  html+='</div>';
+  cont.innerHTML=html;
+}
+
+function updateManualField(el) {
+  const g=el.dataset.group;
+  if(!state.realStandings[g]) state.realStandings[g]=['','','',''];
+  state.realStandings[g][parseInt(el.dataset.pos)]=el.value.trim();
+}
+function saveManualStandings(){
+  patch('realStandings', { realStandings: state.realStandings });
+  toast('Classifiche reali salvate');
+}
+function saveRealSpecials(){
+  if(!state.realSpecials) state.realSpecials={};
+  state.realSpecials.winner=document.getElementById('real-winner').value.trim();
+  state.realSpecials.scorer=document.getElementById('real-scorer').value.trim();
+  patch('realSpecials', { winner: state.realSpecials.winner, scorer: state.realSpecials.scorer });
+  toast('Risultati speciali salvati');
+}
+
+function addPlayer() {
+  const inp=document.getElementById('new-player-input');
+  const name=inp.value.trim();
+  if(!name) return;
+  if(state.players.includes(name)){toast('Giocatore già presente',false);return;}
+  state.players.push(name);
+  if(!state.predictions[name]){state.predictions[name]={};GROUPS.forEach(g=>state.predictions[name][g]=['','','','']);}
+  if(!state.specials[name]) state.specials[name]={winner:'',scorer:''};
+  inp.value='';
+  patch('players', { players: state.players });
+  renderSettings();toast(name+' aggiunto');
+}
+function removePlayer(i) {
+  const name=state.players[i];
+  if(HARDCODED_PLAYERS.includes(name)){toast('Non puoi rimuovere i giocatori precaricati',false);return;}
+  if(!confirm('Rimuovere '+name+'?')) return;
+  state.players.splice(i,1);
+  delete state.predictions[name];
+  delete state.specials[name];
+  patch('players', { players: state.players });
+  renderSettings();
+}
+
+// Normalizza i nomi inglesi dell'API verso i nomi italiani usati nei pronostici
+const API_NAME_MAP = {
+  'czech republic':'Rep Ceca','czechia':'Rep Ceca',
+  'mexico':'Messico','south korea':'Corea del Sud','korea republic':'Corea del Sud',
+  'south africa':'Sudafrica','switzerland':'Svizzera','bosnia and herzegovina':'Bosnia',
+  'brazil':'Brasile','scotland':'Scozia','morocco':'Marocco',
+  'turkey':'Turchia','türkiye':'Turchia','united states':'USA','usa':'USA',
+  'germany':'Germania','ivory coast':"Costa d'Avorio",'côte d\'ivoire':"Costa d'Avorio",
+  'netherlands':'Olanda','sweden':'Svezia','japan':'Giappone',
+  'belgium':'Belgio','egypt':'Egitto','new zealand':'Nuova Zelanda',
+  'spain':'Spagna','cape verde':'Capo Verde','cabo verde':'Capo Verde',
+  'saudi arabia':'Arabia Saudita','france':'Francia','norway':'Norvegia',
+  'jordan':'Giordania','portugal':'Portogallo','england':'Inghilterra',
+  'croatia':'Croazia','austria':'Austria','algeria':'Algeria','colombia':'Colombia',
+  'argentina':'Argentina','uruguay':'Uruguay','senegal':'Senegal','iran':'Iran',
+  'iraq':'Iraq','qatar':'Qatar','canada':'Canada','haiti':'Haiti','paraguay':'Paraguay',
+  'australia':'Australia','ecuador':'Ecuador','curacao':'Curacao','curaçao':'Curacao',
+  'tunisia':'Tunisia','ghana':'Ghana','panama':'Panama','uzbekistan':'Uzbekistan','congo':'Congo'
+};
+function mapApiName(name) {
+  const k = String(name||'').trim().toLowerCase();
+  return API_NAME_MAP[k] || name;
+}
+
+// Chiama la Netlify Function che fa da proxy (niente CORS, chiave lato server)
+async function fetchStandings() {
+  const res = await fetch('/api/standings');
+  if (!res.ok) {
+    let msg = 'HTTP ' + res.status;
+    try { const j = await res.json(); if (j.error) msg = j.error; } catch(e){}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  if (!data || !data.standings) throw new Error('Risposta non valida dalla function');
+  return data;
+}
+
+async function testAndFetch(silent) {
+  const badge=document.getElementById('api-status');
+  if(badge){badge.className='api-status-badge status-idle';badge.textContent='⏳ Sincronizzazione...';}
+  try {
+    const data = await fetchStandings();
+    const standings={};
+    (data.standings||[]).forEach(group=>{
+      const raw=group.group||group.stage||'?';
+      const letter=raw.replace(/^.*_/,'');
+      if(group.table && group.table.length){
+        standings[letter]=group.table.map(r=>mapApiName(r.team.name));
+      }
+    });
+    const n=Object.keys(standings).length;
+    if(!n) throw new Error('Nessun girone disponibile (torneo non ancora iniziato?)');
+    Object.keys(standings).forEach(g=>{state.realStandings[g]=standings[g];});
+    state.lastSync = new Date().toISOString();
+    patch('realStandings', { realStandings: state.realStandings });
+    if(badge){badge.className='api-status-badge status-ok';badge.textContent=`✓ ${n} gironi sincronizzati`;}
+    if(!silent) toast(`${n} gironi caricati`);
+    if(document.getElementById('manual-standings-form')) renderManualStandingsForm();
+    // aggiorna le viste se l'utente le sta guardando
+    if(document.getElementById('screen-overview').classList.contains('active')) renderOverview();
+    if(document.getElementById('screen-classifica').classList.contains('active')) renderLeaderboard();
+  } catch(e){
+    if(badge){badge.className='api-status-badge status-err';badge.textContent=`✗ ${e.message}`;}
+    if(!silent) toast(e.message,false);
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function refreshCurrentScreen() {
+  populateSelect('overview-player');
+  populateSelect('insert-player');
+  const active = document.querySelector('.screen.active');
+  const id = active ? active.id : 'screen-overview';
+  if (id === 'screen-overview') renderOverview();
+  else if (id === 'screen-classifica') renderLeaderboard();
+  else if (id === 'screen-inserimento') renderInsertForm();
+  else if (id === 'screen-settings') renderSettings();
+}
+
+// 1. Parti con i soli default in memoria
+ensureDefaults();
+populateSelect('overview-player');
+populateSelect('insert-player');
+renderOverview();
+
+// 2. Carica subito da Redis
+loadFromServer().then(() => refreshCurrentScreen());
+
+// 3. Connetti SSE per push in tempo reale
+connectSSE();
+
+// 4. Sync classifiche API (silenziosa)
+testAndFetch(true);
+
+// 5. Re-sync + riconnessione SSE quando torni sull'app
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    loadFromServer().then(changed => { if (changed) refreshCurrentScreen(); });
+    if (!_evtSource || _evtSource.readyState === EventSource.CLOSED) connectSSE();
+  }
+});
+</script>
+</body>
+</html>
