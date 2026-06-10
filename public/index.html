@@ -100,6 +100,10 @@
   .insert-row:last-child { margin-bottom: 0; }
   .insert-pos { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted2); flex-shrink: 0; }
   .insert-row input { padding: 6px 10px; font-size: 13px; border-radius: 6px; }
+  .drag-handle { color: var(--muted); font-size: 15px; cursor: grab; flex-shrink: 0; padding: 0 3px; user-select: none; line-height: 1; transition: color 0.15s; }
+  .drag-handle:hover { color: var(--muted2); }
+  .insert-row.dragging { opacity: 0.35; }
+  .insert-row.drag-over { background: rgba(59,130,246,0.1); border-radius: 6px; outline: 1px dashed var(--accent); }
   .settings-section { margin-bottom: 24px; }
   .players-list { display: flex; flex-direction: column; gap: 6px; }
   .player-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
@@ -234,13 +238,14 @@
   </section>
   <section id="screen-settings" class="screen">
     <div class="settings-section"><div class="card">
-      <div class="card-title">Classifiche reali — football-data.org</div>
+      <div class="card-title">Classifiche reali — live</div>
       <div class="row mt-4">
         <button class="btn btn-primary" onclick="testAndFetch()">🔄 Sincronizza dall'API</button>
       </div>
       <div id="api-status" class="api-status-badge status-idle">⚪ Pronto per la sincronizzazione</div>
       <div class="divider"></div>
-      <p style="font-size:13px;color:var(--muted2)">Le classifiche si sincronizzano <strong>automaticamente ogni volta che apri il sito</strong>. I dati sono salvati su <strong>Upstash Redis</strong> e sono identici su tutti i dispositivi in tempo reale. Se la connessione fallisce, usa l'inserimento manuale qui sotto.</p>
+      <p style="font-size:13px;color:var(--muted2)">Le classifiche si sincronizzano <strong>automaticamente ogni volta che apri il sito</strong> da due fonti gratuite: <strong>ESPN</strong> (senza chiave, attiva di default) e <strong>football-data.org</strong> (opzionale, dati ufficiali). I dati sono salvati su <strong>Upstash Redis</strong> e sono identici su tutti i dispositivi in tempo reale. Se la connessione fallisce, usa l'inserimento manuale qui sotto.</p>
+      <p style="font-size:13px;color:var(--muted2);margin-top:8px">Per usare football-data.org: registrati gratis su <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener">football-data.org/client/register</a>, ricevi la chiave via email e impostala come variabile d'ambiente <code>FOOTBALL_DATA_API_KEY</code> nel pannello del tuo hosting (Vercel → Settings → Environment Variables), poi rideploya.</p>
       <div class="mt-12">
         <div class="label" style="margin-top:12px;margin-bottom:10px">Classifiche reali (inserimento manuale)</div>
         <div id="manual-standings-form"></div>
@@ -417,6 +422,10 @@ let state = {
   lastSync: null
 };
 
+// Traccia chi ha SALVATO i gironi su Redis (non solo chi ha dati in memoria).
+// Separare questo concetto da state.predictions evita che il primo drag blocchi il form.
+const _savedPredictions = new Set();
+
 // Normalizza lo stato: garantisce giocatori hardcoded e classifiche di default
 function ensureDefaults() {
   HARDCODED_PLAYERS.forEach(p => {
@@ -427,6 +436,15 @@ function ensureDefaults() {
   if (!state.realStandings || Object.keys(state.realStandings).length === 0) {
     state.realStandings = JSON.parse(JSON.stringify(DEFAULT_STANDINGS));
   }
+  // Ricostruisce _savedPredictions dal contenuto dello state (locale o Redis).
+  // I giocatori hardcoded sono sempre considerati "salvati".
+  // I nuovi giocatori lo sono solo se hanno prediction non-vuote (= già salvate su Redis in passato).
+  _savedPredictions.clear();
+  state.players.forEach(p => {
+    const pred = state.predictions[p] || {};
+    if (HARDCODED_PLAYERS.includes(p) || GROUPS.some(g => (pred[g]||[]).some(t => t && t.trim())))
+      _savedPredictions.add(p);
+  });
 }
 
 // localStorage: SOLO cache di lettura per il primo render immediato.
@@ -752,8 +770,7 @@ function renderLeaderboard() {
 
 // ── INSERT FORM ───────────────────────────────────────────────────────────────
 function hasGroupPrediction(player) {
-  const pred = state.predictions[player] || {};
-  return GROUPS.some(g => (pred[g]||[]).some(t => t && t.trim()));
+  return _savedPredictions.has(player);
 }
 function hasSpecialsPrediction(player) {
   const sp = state.specials[player] || {};
@@ -781,17 +798,20 @@ function renderInsertForm() {
   } else if(groupsLocked && specialsLocked){
     html += `<div class="alert alert-info">🔒 <strong>${esc(player)}</strong> ha completato tutti i pronostici. Sono in sola lettura.</div>`;
   } else {
-    html += `<div class="alert alert-warn">✏️ Inserisci i pronostici dei gironi di <strong>${esc(player)}</strong>. Una volta salvati non potranno più essere modificati.</div>`;
+    html += `<div class="alert alert-warn">✏️ Pronostici di <strong>${esc(player)}</strong>: le squadre sono già in ordine alfabetico — <strong>trascina ⠿ per riordinarle</strong>, poi salva. Una volta salvati non potranno più essere modificati.</div>`;
   }
 
   html+=`<div class="groups-grid" id="insert-grid">`;
   GROUPS.forEach(g=>{
-    const teams=pred[g]||['','','',''];
+    const raw=pred[g]||[];
+    const teams=raw.every(t=>!t) ? (DEFAULT_STANDINGS[g]||['','','','']).slice() : raw;
     html+=`<div class="insert-group-card"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span>${groupsLocked?'<span style="margin-left:auto;font-size:13px">🔒</span>':''}</div><div class="insert-group-body">`;
     for(let i=0;i<POSITIONS;i++){
       const v=teams[i]||'';
       const oninput = groupsLocked ? '' : `oninput="updatePredField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"`;
-      html+=`<div class="insert-row"><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" ${gDis} ${oninput} style="${groupsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>`;
+      const dragAttrs = groupsLocked ? '' : `draggable="true" data-group="${g}" data-pos="${i}" data-form="predict" ondragstart="rowDragStart(event,'predict')" ondragover="rowDragOver(event)" ondrop="rowDrop(event,'predict')" ondragend="rowDragEnd()"`;
+      const handle = groupsLocked ? '' : `<span class="drag-handle">⠿</span>`;
+      html+=`<div class="insert-row" ${dragAttrs}>${handle}<div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" ${gDis} ${oninput} style="${groupsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>`;
     }
     html+='</div></div>';
   });
@@ -813,6 +833,7 @@ function renderInsertForm() {
   html += buttons.join('');
 
   cont.innerHTML=html;
+  initTouchDrag();
 }
 
 function updatePredField(el) {
@@ -827,6 +848,7 @@ function updatePredField(el) {
 function saveGroups() {
   const player=document.getElementById('insert-player').value;
   if(!player) return;
+  _savedPredictions.add(player);
   patch('groups', { player, predictions: state.predictions[player] });
   toast('Pronostici gironi di '+player+' salvati');
   renderInsertForm();
@@ -865,12 +887,13 @@ function renderManualStandingsForm() {
     html+=`<div class="insert-group-card"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span></div><div class="insert-group-body">`;
     for(let i=0;i<POSITIONS;i++){
       const v=rTeams[i]||'';
-      html+=`<div class="insert-row"><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" oninput="updateManualField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"/></div>`;
+      html+=`<div class="insert-row" draggable="true" data-group="${g}" data-pos="${i}" data-form="manual" ondragstart="rowDragStart(event,'manual')" ondragover="rowDragOver(event)" ondrop="rowDrop(event,'manual')" ondragend="rowDragEnd()"><span class="drag-handle">⠿</span><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" oninput="updateManualField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"/></div>`;
     }
     html+='</div></div>';
   });
   html+='</div>';
   cont.innerHTML=html;
+  initTouchDrag();
 }
 
 function updateManualField(el) {
@@ -917,7 +940,8 @@ function removePlayer(i) {
 const API_NAME_MAP = {
   'czech republic':'Rep Ceca','czechia':'Rep Ceca',
   'mexico':'Messico','south korea':'Corea del Sud','korea republic':'Corea del Sud',
-  'south africa':'Sudafrica','switzerland':'Svizzera','bosnia and herzegovina':'Bosnia',
+  'south africa':'Sudafrica','switzerland':'Svizzera',
+  'bosnia and herzegovina':'Bosnia','bosnia-herzegovina':'Bosnia','bosnia & herzegovina':'Bosnia',
   'brazil':'Brasile','scotland':'Scozia','morocco':'Marocco',
   'turkey':'Turchia','türkiye':'Turchia','united states':'USA','usa':'USA',
   'germany':'Germania','ivory coast':"Costa d'Avorio",'côte d\'ivoire':"Costa d'Avorio",
@@ -930,24 +954,35 @@ const API_NAME_MAP = {
   'argentina':'Argentina','uruguay':'Uruguay','senegal':'Senegal','iran':'Iran',
   'iraq':'Iraq','qatar':'Qatar','canada':'Canada','haiti':'Haiti','paraguay':'Paraguay',
   'australia':'Australia','ecuador':'Ecuador','curacao':'Curacao','curaçao':'Curacao',
-  'tunisia':'Tunisia','ghana':'Ghana','panama':'Panama','uzbekistan':'Uzbekistan','congo':'Congo'
+  'tunisia':'Tunisia','ghana':'Ghana','panama':'Panama','uzbekistan':'Uzbekistan',
+  'congo':'Congo','congo dr':'Congo','dr congo':'Congo','congo, democratic republic':'Congo'
 };
 function mapApiName(name) {
   const k = String(name||'').trim().toLowerCase();
   return API_NAME_MAP[k] || name;
 }
 
-// Chiama la Netlify Function che fa da proxy (niente CORS, chiave lato server)
 async function fetchStandings() {
-  const res = await fetch('/api/standings');
-  if (!res.ok) {
-    let msg = 'HTTP ' + res.status;
-    try { const j = await res.json(); if (j.error) msg = j.error; } catch(e){}
-    throw new Error(msg);
-  }
+  const res = await fetch('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings?season=2026');
+  if (!res.ok) throw new Error('ESPN HTTP ' + res.status);
   const data = await res.json();
-  if (!data || !data.standings) throw new Error('Risposta non valida dalla function');
-  return data;
+  const standings = [];
+  for (const child of (data.children || [])) {
+    const m = /([A-L])\s*$/i.exec((child.name || '').trim());
+    if (!m) continue;
+    const letter = m[1].toUpperCase();
+    const entries = (child.standings && child.standings.entries) || [];
+    if (!entries.length) continue;
+    const rows = entries.map(e => {
+      const stats = e.stats || [];
+      const find = n => { const s = stats.find(x => x.name === n); return s ? Number(s.value) : null; };
+      return { name: (e.team && (e.team.displayName || e.team.name)) || '', rank: find('rank'), points: find('points') };
+    });
+    rows.sort((a, b) => a.rank != null && b.rank != null ? a.rank - b.rank : (b.points||0) - (a.points||0));
+    standings.push({ group: 'GROUP_' + letter, table: rows.map(r => ({ team: { name: r.name } })) });
+  }
+  if (!standings.length) throw new Error('Nessun girone disponibile');
+  return { standings };
 }
 
 async function testAndFetch(silent) {
@@ -968,7 +1003,8 @@ async function testAndFetch(silent) {
     Object.keys(standings).forEach(g=>{state.realStandings[g]=standings[g];});
     state.lastSync = new Date().toISOString();
     patch('realStandings', { realStandings: state.realStandings });
-    if(badge){badge.className='api-status-badge status-ok';badge.textContent=`✓ ${n} gironi sincronizzati`;}
+    const src=data.source?` (fonte: ${data.source})`:'';
+    if(badge){badge.className='api-status-badge status-ok';badge.textContent=`✓ ${n} gironi sincronizzati${src}`;}
     if(!silent) toast(`${n} gironi caricati`);
     if(document.getElementById('manual-standings-form')) renderManualStandingsForm();
     // aggiorna le viste se l'utente le sta guardando
@@ -978,6 +1014,91 @@ async function testAndFetch(silent) {
     if(badge){badge.className='api-status-badge status-err';badge.textContent=`✗ ${e.message}`;}
     if(!silent) toast(e.message,false);
   }
+}
+
+// ── DRAG & DROP ───────────────────────────────────────────────────────────────
+let _dragSrc = null;
+let _touchDrag = null;
+
+function rowDragStart(e, formType) {
+  const row = e.currentTarget;
+  _dragSrc = { group: row.dataset.group, pos: parseInt(row.dataset.pos), formType };
+  row.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', '');
+}
+
+function rowDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.insert-row.drag-over').forEach(el => el.classList.remove('drag-over'));
+  const row = e.currentTarget;
+  if (_dragSrc && row.dataset.group === _dragSrc.group && parseInt(row.dataset.pos) !== _dragSrc.pos)
+    row.classList.add('drag-over');
+}
+
+function rowDrop(e, formType) {
+  e.preventDefault();
+  const row = e.currentTarget;
+  if (!_dragSrc || row.dataset.group !== _dragSrc.group) return;
+  const toPos = parseInt(row.dataset.pos);
+  if (toPos === _dragSrc.pos) return;
+  swapRows(formType, _dragSrc.group, _dragSrc.pos, toPos);
+}
+
+function rowDragEnd() {
+  document.querySelectorAll('.insert-row.dragging, .insert-row.drag-over').forEach(el =>
+    el.classList.remove('dragging', 'drag-over'));
+  _dragSrc = null;
+}
+
+function swapRows(formType, group, from, to) {
+  if (formType === 'manual') {
+    const arr = (state.realStandings[group] || ['','','','']).slice();
+    [arr[from], arr[to]] = [arr[to], arr[from]];
+    state.realStandings[group] = arr;
+    renderManualStandingsForm();
+  } else {
+    const player = document.getElementById('insert-player').value;
+    if (!player || !state.predictions[player]) return;
+    const raw = state.predictions[player][group] || [];
+    const arr = raw.every(t => !t) ? (DEFAULT_STANDINGS[group] || ['','','','']).slice() : raw.slice();
+    [arr[from], arr[to]] = [arr[to], arr[from]];
+    state.predictions[player][group] = arr;
+    renderInsertForm();
+  }
+}
+
+function initTouchDrag() {
+  document.querySelectorAll('.insert-row[draggable="true"]').forEach(row => {
+    if (row._td) return;
+    row._td = true;
+    row.addEventListener('touchstart', () => {
+      _touchDrag = { group: row.dataset.group, pos: parseInt(row.dataset.pos), formType: row.dataset.form, targetRow: null };
+      row.classList.add('dragging');
+    }, { passive: true });
+    row.addEventListener('touchmove', e => {
+      if (!_touchDrag) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      document.querySelectorAll('.insert-row.drag-over').forEach(el => el.classList.remove('drag-over'));
+      const hit = document.elementFromPoint(t.clientX, t.clientY);
+      const target = hit && hit.closest('.insert-row[draggable="true"]');
+      if (target && target.dataset.group === _touchDrag.group && parseInt(target.dataset.pos) !== _touchDrag.pos) {
+        target.classList.add('drag-over');
+        _touchDrag.targetRow = target;
+      } else { _touchDrag.targetRow = null; }
+    }, { passive: false });
+    row.addEventListener('touchend', () => {
+      if (_touchDrag && _touchDrag.targetRow) {
+        swapRows(_touchDrag.formType, _touchDrag.group, _touchDrag.pos, parseInt(_touchDrag.targetRow.dataset.pos));
+      } else {
+        document.querySelectorAll('.insert-row.dragging, .insert-row.drag-over').forEach(el =>
+          el.classList.remove('dragging', 'drag-over'));
+        _touchDrag = null;
+      }
+    });
+  });
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
