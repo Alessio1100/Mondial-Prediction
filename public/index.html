@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=ac_unit,auto_awesome,casino,check,close,done_all,drag_indicator,edit,emoji_events,group,groups,home,hourglass_empty,leaderboard,local_fire_department,location_on,lock,save,schedule,settings,sports_soccer,star,sync,warning&display=block" rel="stylesheet">
 <style>
   :root {
     /* Palette poster ufficiale WC26: blu royal + rosso + teal/mint */
@@ -43,6 +44,8 @@
     --wc-grad: linear-gradient(90deg, var(--wc-red), var(--wc-teal), var(--wc-green));
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Icone Material Symbols (pack minimal coerente con lo stile) */
+  .ms { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; font-size: 1.2em; line-height: 1; display: inline-block; vertical-align: -0.2em; letter-spacing: normal; text-transform: none; white-space: nowrap; -webkit-font-smoothing: antialiased; }
   html { scroll-behavior: smooth; }
   body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; min-height: 100vh; overflow-x: hidden; }
   /* Forme geometriche piatte agli angoli, come i poster ufficiali */
@@ -52,10 +55,11 @@
   body::after { width: 36vmax; height: 36vmax; bottom: -14vmax; left: -14vmax;
     background: var(--wc-red); border-radius: 0 38% 0 0; opacity: 0.9; }
   .header { background: var(--surface2); border-bottom: none; padding: 0 24px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; box-shadow: 0 4px 20px rgba(0,0,30,0.25); }
-  .header-title { font-family: var(--font-display); font-size: 24px; letter-spacing: 2px; padding: 10px 0; flex: 0 0 auto; margin-right: 32px; color: var(--text); display: flex; align-items: center; gap: 12px; text-transform: uppercase; }
-  .header-title .wc-sub { color: var(--gold); }
-  /* Logo ufficiale WC26 (immagine) dentro un badge bianco arrotondato */
-  .wc-logo-img { height: 42px; width: auto; background: #fff; border-radius: 10px; padding: 3px 7px; box-shadow: 0 2px 10px rgba(0,0,40,0.3); flex: 0 0 auto; }
+  /* Wordmark FWC26: SVG ufficiale vettorializzato, bianco su sfondo trasparente */
+  .header-title { padding: 10px 0; flex: 0 0 auto; margin-right: 32px; display: flex; align-items: center; gap: 12px; background: transparent; }
+  .wc-wordmark { height: 15px; width: auto; display: block; }
+  /* Logo ufficiale WC26 su badge nero: fa risaltare il bianco del "26" */
+  .wc-logo-img { height: 42px; width: auto; background: #000; border-radius: 10px; padding: 4px 8px; box-shadow: 0 2px 10px rgba(0,0,40,0.35); flex: 0 0 auto; }
   .nav { display: flex; gap: 6px; flex: 1; }
   .nav-btn { padding: 8px 18px; background: transparent; border: none; color: var(--muted2); font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px; transition: all 0.2s; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
   .nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); }
@@ -158,6 +162,28 @@
   .chip:hover { color: #fff; }
   .chip.active { background: #fff; color: var(--surface2); box-shadow: 0 2px 12px rgba(0,0,30,0.35); }
   .chips-select { display: none !important; }
+  /* Tabella classifiche live (sezione Live) */
+  .live-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .live-table th { font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; color: rgba(255,255,255,0.65); padding: 3px 2px; text-align: center; text-transform: uppercase; }
+  .live-table td { padding: 5px 2px; text-align: center; color: #fff; border-top: 1px solid rgba(255,255,255,0.12); }
+  .live-table .lt-team { text-align: left; font-weight: 700; text-transform: uppercase; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+  .live-table td.lt-pts { font-weight: 800; color: var(--gold); }
+  .live-table img { border-radius: 50%; width: 14px !important; height: 14px !important; object-fit: cover; vertical-align: -2px; box-shadow: 0 0 0 1px rgba(255,255,255,0.45); }
+  /* Partite del giorno */
+  .match-block { padding: 9px 0 7px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .match-block:last-child { border-bottom: none; padding-bottom: 0; }
+  .match-row { display: flex; align-items: center; gap: 10px; }
+  .match-team { flex: 1; display: flex; align-items: center; gap: 7px; font-weight: 700; text-transform: uppercase; font-size: 13px; min-width: 0; }
+  .match-team span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .match-team.right { justify-content: flex-end; text-align: right; }
+  .match-center { flex: 0 0 auto; text-align: center; min-width: 68px; }
+  .match-score { font-family: var(--font-display); font-size: 23px; letter-spacing: 2px; line-height: 1; }
+  .match-time { font-family: var(--font-display); font-size: 19px; color: var(--muted2); line-height: 1; }
+  .match-meta { font-size: 10.5px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .match-venue { font-size: 11px; color: var(--muted); text-align: center; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .live-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: #fff; background: var(--wc-red); border-radius: 999px; padding: 2px 9px; letter-spacing: 0.06em; margin-top: 3px; }
+  .live-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: livePulse 1.2s ease-in-out infinite; }
+  @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
   .settings-section { margin-bottom: 24px; }
   .players-list { display: flex; flex-direction: column; gap: 6px; }
   .player-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
@@ -190,7 +216,8 @@
 
     /* Header compatto: solo titolo + ingranaggio */
     .header { padding: 10px 16px; justify-content: space-between; }
-    .header-title { font-size: 22px; letter-spacing: 1.5px; margin-right: 0; padding: 6px 0; gap: 10px; }
+    .header-title { margin-right: 0; padding: 6px 0; gap: 10px; }
+    .wc-wordmark { height: 13px; }
     .wc-logo-img { height: 36px; border-radius: 8px; }
 
     /* La nav superiore diventa una bottom tab bar fissa */
@@ -261,7 +288,8 @@
 
   /* ===== MOBILE PICCOLO (≤360px) ===== */
   @media (max-width: 360px) {
-    .header-title { font-size: 18px; gap: 8px; }
+    .header-title { gap: 8px; }
+    .wc-wordmark { height: 11px; }
     .wc-logo-img { height: 32px; }
     .nav-btn .nav-label { font-size: 9px; }
     .standing-team { font-size: 14px; }
@@ -273,19 +301,22 @@
 <header class="header">
   <div class="header-title">
     <img class="wc-logo-img" src="/WC26_Logo.webp" alt="FIFA World Cup 26"/>
-    <span>FIFA WORLD CUP <span class="wc-sub">26</span></span>
+    <img class="wc-wordmark" src="/wordmark.svg" alt="FIFA World Cup 26"/>
   </div>
   <nav class="nav">
-    <button class="nav-btn active" onclick="showScreen('overview',this)"><span class="nav-emoji">🏠</span><span class="nav-label">Home</span></button>
-    <button class="nav-btn" onclick="showScreen('classifica',this)"><span class="nav-emoji">🏆</span><span class="nav-label">Classifica</span></button>
-    <button class="nav-btn" onclick="showScreen('inserimento',this)"><span class="nav-emoji">✏️</span><span class="nav-label">Pronostici</span></button>
-    <button class="nav-btn nav-btn-settings-mobile" onclick="showScreen('settings',this)"><span class="nav-emoji">⚙️</span><span class="nav-label">Config</span></button>
+    <button class="nav-btn active" onclick="showScreen('overview',this)"><span class="nav-emoji ms">home</span><span class="nav-label">Home</span></button>
+    <button class="nav-btn" onclick="showScreen('classifica',this)"><span class="nav-emoji ms">emoji_events</span><span class="nav-label">Classifica</span></button>
+    <button class="nav-btn" onclick="showScreen('live',this)"><span class="nav-emoji ms">leaderboard</span><span class="nav-label">Live</span></button>
+    <button class="nav-btn" onclick="showScreen('inserimento',this)"><span class="nav-emoji ms">edit</span><span class="nav-label">Pronostici</span></button>
+    <button class="nav-btn nav-btn-settings-mobile" onclick="showScreen('settings',this)"><span class="nav-emoji ms">settings</span><span class="nav-label">Config</span></button>
   </nav>
-  <button class="header-settings" onclick="showScreen('settings',null)" title="Impostazioni">⚙</button>
+  <button class="header-settings" onclick="showScreen('settings',null)" title="Impostazioni"><span class="ms">settings</span></button>
 </header>
 <main class="main">
   <section id="screen-overview" class="screen active">
     <div id="kpi-content"></div>
+    <div id="today-matches"></div>
+    <div id="unani-content"></div>
     <div class="divider mb-16"></div>
     <div class="mb-16">
       <div class="label">Dettaglio giocatore</div>
@@ -296,6 +327,9 @@
   </section>
   <section id="screen-classifica" class="screen">
     <div id="classifica-content"></div>
+  </section>
+  <section id="screen-live" class="screen">
+    <div id="live-content"></div>
   </section>
   <section id="screen-inserimento" class="screen">
     <div class="mb-16">
@@ -309,16 +343,16 @@
     <div class="settings-section"><div class="card">
       <div class="card-title">Classifiche reali — live</div>
       <div class="row mt-4">
-        <button class="btn btn-primary" onclick="testAndFetch()">🔄 Sincronizza dall'API</button>
+        <button class="btn btn-primary" onclick="testAndFetch()"><span class="ms">sync</span> Sincronizza dall'API</button>
       </div>
-      <div id="api-status" class="api-status-badge status-idle">⚪ Pronto per la sincronizzazione</div>
+      <div id="api-status" class="api-status-badge status-idle"><span class="ms">sync</span> Pronto per la sincronizzazione</div>
       <div class="divider"></div>
       <p style="font-size:13px;color:var(--muted2)">Le classifiche si sincronizzano <strong>automaticamente ogni volta che apri il sito</strong> da due fonti gratuite: <strong>ESPN</strong> (senza chiave, attiva di default) e <strong>football-data.org</strong> (opzionale, dati ufficiali). I dati sono salvati su <strong>Upstash Redis</strong> e sono identici su tutti i dispositivi in tempo reale. Se la connessione fallisce, usa l'inserimento manuale qui sotto.</p>
       <p style="font-size:13px;color:var(--muted2);margin-top:8px">Per usare football-data.org: registrati gratis su <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener">football-data.org/client/register</a>, ricevi la chiave via email e impostala come variabile d'ambiente <code>FOOTBALL_DATA_API_KEY</code> nel pannello del tuo hosting (Vercel → Settings → Environment Variables), poi rideploya.</p>
       <div class="mt-12">
         <div class="label" style="margin-top:12px;margin-bottom:10px">Classifiche reali (inserimento manuale)</div>
         <div id="manual-standings-form"></div>
-        <button class="btn btn-primary mt-12" onclick="saveManualStandings()" style="width:100%">💾 Salva classifiche manuali</button>
+        <button class="btn btn-primary mt-12" onclick="saveManualStandings()" style="width:100%"><span class="ms">save</span> Salva classifiche manuali</button>
       </div>
     </div></div>
     <div class="settings-section"><div class="card">
@@ -336,7 +370,7 @@
         <div class="flex-1"><div class="label">Nazionale vincitrice (reale)</div><input type="text" id="real-winner" placeholder="es. Brasile"/></div>
         <div class="flex-1"><div class="label">Capocannoniere (reale)</div><input type="text" id="real-scorer" placeholder="es. Mbappé"/></div>
       </div>
-      <button class="btn btn-primary mt-12" onclick="saveRealSpecials()" style="width:100%">💾 Salva risultati speciali</button>
+      <button class="btn btn-primary mt-12" onclick="saveRealSpecials()" style="width:100%"><span class="ms">save</span> Salva risultati speciali</button>
     </div></div>
   </section>
 </main>
@@ -344,11 +378,33 @@
 <script>
 const GROUPS = ['A','B','C','D','E','F','G','H','I','J','K','L'];
 const POSITIONS = 4;
-// Colore di ogni girone, come i pannelli colorati del sorteggio ufficiale WC26
+// Colore di fallback per girone (usato se la capolista non è nota)
 const GROUP_COLORS = {
   A:'#009e4a', B:'#0077c8', C:'#e8203a', D:'#3d56dd', E:'#7c3aed', F:'#e86a10',
   G:'#0d9488', H:'#c026d3', I:'#be1238', J:'#15803d', K:'#5b5fc7', L:'#b07d10'
 };
+
+// Colore principale di ogni nazionale (bandiera/maglia), leggibile con testo bianco
+const TEAM_COLORS = {
+  'rep ceca':'#11457e','messico':'#006847','corea del sud':'#cd2e3a','sudafrica':'#007a4d',
+  'svizzera':'#da291c','canada':'#d80621','bosnia':'#002f6c','qatar':'#8a1538',
+  'brasile':'#009739','scozia':'#005eb8','marocco':'#c1272d','haiti':'#00209f',
+  'turchia':'#e30a17','usa':'#3c3b6e','paraguay':'#d52b1e','australia':'#012169',
+  'germania':'#1f1f1f',"costa d'avorio":'#ff8200','ecuador':'#c69214','curacao':'#002b7f',
+  'olanda':'#e86a10','svezia':'#006aa7','giappone':'#bc002d','tunisia':'#e70013',
+  'belgio':'#c8102e','egitto':'#ce1126','nuova zelanda':'#1a1a1a','iran':'#239f40',
+  'spagna':'#aa151b','uruguay':'#3e9bc8','capo verde':'#003893','arabia saudita':'#006c35',
+  'francia':'#002395','senegal':'#00853f','norvegia':'#ba0c2f','iraq':'#a91622',
+  'argentina':'#43a1d5','austria':'#ef3340','algeria':'#006633','giordania':'#007a3d',
+  'portogallo':'#046a38','colombia':'#e0a100','uzbekistan':'#0099b5','congo':'#009543',
+  'inghilterra':'#1d3c8f','croazia':'#d40000','ghana':'#006b3f','panama':'#005293'
+};
+
+// Colore card girone = colore della squadra prima in classifica (reale)
+function groupColor(g, leaderName) {
+  const leader = leaderName || (state.realStandings[g] || [])[0] || '';
+  return TEAM_COLORS[normTeam(leader)] || GROUP_COLORS[g];
+}
 const STORAGE_KEY = 'wc2026_v3';
 
 // ── HARDCODED PREDICTIONS ──────────────────────────────────────────────────────
@@ -635,7 +691,7 @@ function showSyncIndicator() {
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function toast(msg, ok=true) {
   const el = document.getElementById('toast');
-  el.textContent = (ok?'✓ ':'✗ ')+msg;
+  el.innerHTML = `<span class="ms" style="color:${ok?'var(--green)':'var(--red)'}">${ok?'check':'close'}</span> `+esc(msg);
   el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'), 2500);
 }
@@ -678,6 +734,7 @@ function showScreen(name, btn) {
   if(btn) btn.classList.add('active');
   if(name==='overview'){populateSelect('overview-player');renderOverview();}
   if(name==='classifica') renderLeaderboard();
+  if(name==='live') renderLive();
   if(name==='inserimento'){populateSelect('insert-player');renderInsertForm();}
   if(name==='settings') renderSettings();
 }
@@ -691,9 +748,9 @@ function populateSelect(id) {
     o.value=p;
     if(markLock){
       const g=hasGroupPrediction(p), s=hasSpecialsPrediction(p);
-      if(g&&s) o.textContent = p+' 🔒';
-      else if(g&&!s) o.textContent = p+' ✏️ (speciali da inserire)';
-      else o.textContent = p+' ✏️';
+      if(g&&s) o.textContent = p+' (completo)';
+      else if(g&&!s) o.textContent = p+' (speciali da inserire)';
+      else o.textContent = p;
     } else {
       o.textContent=p;
     }
@@ -713,13 +770,13 @@ function renderChips(id) {
   state.players.forEach(p => {
     const b = document.createElement('button');
     b.type = 'button';
-    let label = p;
+    let label = esc(p);
     if (markLock) {
       const g = hasGroupPrediction(p), s = hasSpecialsPrediction(p);
-      label = (g && s) ? p + ' 🔒' : p + ' ✏️';
+      label += (g && s) ? ' <span class="ms" style="font-size:13px">lock</span>' : ' <span class="ms" style="font-size:13px">edit</span>';
     }
     b.className = 'chip' + (sel.value === p ? ' active' : '');
-    b.textContent = label;
+    b.innerHTML = label;
     b.onclick = () => {
       sel.value = p;
       cont.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -889,7 +946,7 @@ function renderKPIs() {
   let h = `<div class="kpi-grid">`;
 
   h+=`<div class="kpi-card kpi-card-gold">
-    <div class="kpi-label">🎯 Posizioni unanimi</div>
+    <div class="kpi-label"><span class="ms">done_all</span> Posizioni unanimi</div>
     <div style="display:flex;align-items:baseline;gap:6px">
       <div class="kpi-value">${k.unani.length}</div>
       <div style="font-size:20px;color:var(--muted2)">/48</div>
@@ -898,42 +955,42 @@ function renderKPIs() {
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">🌡 Girone più contestato</div>
+    <div class="kpi-label"><span class="ms">local_fire_department</span> Girone più contestato</div>
     <div class="kpi-team">Girone ${k.mostControversial.g}</div>
     <div class="kpi-sub">${pct(k.mostControversial.ag)}% accordo medio</div>
     <div class="kpi-bar mt-8"><div class="kpi-bar-fill" style="--w:${pct(k.mostControversial.ag)}%;background:var(--wc-red)"></div></div>
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">❄️ Girone più pacifico</div>
+    <div class="kpi-label"><span class="ms">ac_unit</span> Girone più pacifico</div>
     <div class="kpi-team">Girone ${k.mostPeaceful.g}</div>
     <div class="kpi-sub">${pct(k.mostPeaceful.ag)}% accordo medio</div>
     <div class="kpi-bar mt-8"><div class="kpi-bar-fill" style="--w:${pct(k.mostPeaceful.ag)}%;background:var(--wc-green)"></div></div>
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">🃏 Il più originale</div>
+    <div class="kpi-label"><span class="ms">auto_awesome</span> Il più originale</div>
     <div class="kpi-team">${esc(k.rebel.name)}</div>
     <div class="kpi-sub">${k.rebel.h}/${k.rebel.t} in linea col consenso</div>
     <div class="kpi-bar mt-8"><div class="kpi-bar-fill" style="--w:${pct(k.rebel.pct)}%;background:var(--wc-purple)"></div></div>
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">🐑 Il più conformista</div>
+    <div class="kpi-label"><span class="ms">groups</span> Il più conformista</div>
     <div class="kpi-team">${esc(k.conformist.name)}</div>
     <div class="kpi-sub">${k.conformist.h}/${k.conformist.t} in linea col consenso</div>
     <div class="kpi-bar mt-8"><div class="kpi-bar-fill" style="--w:${pct(k.conformist.pct)}%;background:var(--wc-cyan)"></div></div>
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">👯 Coppia più simile</div>
+    <div class="kpi-label"><span class="ms">group</span> Coppia più simile</div>
     <div class="kpi-team">${esc(k.bestPair.pa)} & ${esc(k.bestPair.pb)}</div>
     <div class="kpi-sub">${k.bestPair.m}/${k.bestPair.t} posizioni identiche</div>
     <div class="kpi-bar mt-8"><div class="kpi-bar-fill" style="--w:${pct(k.bestPair.pct)}%;background:var(--gold)"></div></div>
   </div>`;
 
   h+=`<div class="kpi-card kpi-card-gold">
-    <div class="kpi-label">⭐ Favorita assoluta</div>
+    <div class="kpi-label"><span class="ms">star</span> Favorita assoluta</div>
     <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
       ${flagImg(k.topFirst.name,18)}
       <div class="kpi-team">${esc(k.topFirst.name)}</div>
@@ -942,7 +999,7 @@ function renderKPIs() {
   </div>`;
 
   h+=`<div class="kpi-card">
-    <div class="kpi-label">🎲 Squadra più controversa</div>
+    <div class="kpi-label"><span class="ms">casino</span> Squadra più controversa</div>
     <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
       ${flagImg(k.contested.name,18)}
       <div class="kpi-team">${esc(k.contested.name)}</div>
@@ -951,19 +1008,23 @@ function renderKPIs() {
   </div>`;
 
   h+=`</div>`;
+  return h;
+}
 
-  if(k.unani.length){
-    h+=`<div class="card mb-16"><div class="card-title">Tutti d'accordo su...</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">`;
-    k.unani.forEach(u=>{
-      h+=`<div style="display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;font-size:13px">
-        ${flagImg(u.team,14)}
-        <span style="font-weight:600">${esc(u.team)}</span>
-        <span style="color:var(--muted2)">${u.pos}° · Girone ${u.g}</span>
-      </div>`;
-    });
-    h+=`</div></div>`;
-  }
+// Card "Tutti d'accordo su..." (mostrata in home dopo le partite di oggi)
+function renderUnani() {
+  const k = computeKPIs();
+  if(!k.unani.length) return '';
+  let h=`<div class="card mb-16"><div class="card-title">Tutti d'accordo su...</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">`;
+  k.unani.forEach(u=>{
+    h+=`<div style="display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;font-size:13px">
+      ${flagImg(u.team,14)}
+      <span style="font-weight:600">${esc(u.team)}</span>
+      <span style="color:var(--muted2)">${u.pos}°</span>
+    </div>`;
+  });
+  h+=`</div></div>`;
   return h;
 }
 
@@ -971,6 +1032,8 @@ function renderKPIs() {
 function renderOverview() {
   const kpiEl = document.getElementById('kpi-content');
   if(kpiEl && !kpiEl.innerHTML) kpiEl.innerHTML = renderKPIs();
+  const unaniEl = document.getElementById('unani-content');
+  if(unaniEl && !unaniEl.innerHTML) unaniEl.innerHTML = renderUnani();
   const player=document.getElementById('overview-player').value;
   const cont=document.getElementById('overview-content');
   if(!player){
@@ -987,13 +1050,13 @@ function renderOverview() {
   GROUPS.forEach(g=>{
     const pTeams=pred[g]||['','','',''];
     const rTeams=real[g]||[];
-    html+=`<div class="group-card" style="--gc:${GROUP_COLORS[g]}"><div class="group-card-header"><span class="group-letter">${esc(g)}</span></div><div class="group-card-body">`;
+    html+=`<div class="group-card" style="--gc:${groupColor(g)}"><div class="group-card-header"><span class="group-letter">${esc(g)}</span></div><div class="group-card-body">`;
     for(let i=0;i<POSITIONS;i++){
       const team=pTeams[i]||'';
       let posCls='',icon='';
       if(team&&hasReal&&rTeams[i]){
-        if(normTeam(rTeams[i])===normTeam(team)){posCls='pos-correct';icon=`<span class="standing-icon" style="color:var(--green)">✓</span>`;}
-        else{posCls='pos-wrong';icon=`<span class="standing-icon" style="color:var(--red)">✗</span>`;}
+        if(normTeam(rTeams[i])===normTeam(team)){posCls='pos-correct';icon=`<span class="standing-icon ms" style="color:var(--green)">check</span>`;}
+        else{posCls='pos-wrong';icon=`<span class="standing-icon ms" style="color:var(--red)">close</span>`;}
       }
       const f=team?flagImg(team,14):'';
       html+=`<div class="standing-row"><div class="standing-pos ${posCls}">${i+1}</div>${f||'<span style="width:20px;flex-shrink:0"></span>'}<div class="standing-team">${team?esc(team):'—'}</div>${icon}</div>`;
@@ -1003,11 +1066,11 @@ function renderOverview() {
   html+='</div>';
 
   // Specials
-  const winnerPill=sp.winner?(rsp.winner?(normTeam(sp.winner)===normTeam(rsp.winner)?`<span class="special-badge badge-correct">✓ Corretto</span>`:`<span class="special-badge badge-wrong">✗ Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
-  const scorerPill=sp.scorer?(rsp.scorer?(normTeam(sp.scorer)===normTeam(rsp.scorer)?`<span class="special-badge badge-correct">✓ Corretto</span>`:`<span class="special-badge badge-wrong">✗ Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
+  const winnerPill=sp.winner?(rsp.winner?(normTeam(sp.winner)===normTeam(rsp.winner)?`<span class="special-badge badge-correct"><span class="ms">check</span> Corretto</span>`:`<span class="special-badge badge-wrong"><span class="ms">close</span> Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
+  const scorerPill=sp.scorer?(rsp.scorer?(normTeam(sp.scorer)===normTeam(rsp.scorer)?`<span class="special-badge badge-correct"><span class="ms">check</span> Corretto</span>`:`<span class="special-badge badge-wrong"><span class="ms">close</span> Errato</span>`):`<span class="special-badge badge-pending">In attesa</span>`):'';
   html+=`<div class="specials-card"><div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Pronostici speciali</div>
-    <div class="special-row"><span class="special-icon">🏆</span><div><div class="special-label">Nazionale vincitrice</div><div class="special-value">${sp.winner?esc(sp.winner):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${winnerPill}</div>
-    <div class="special-row"><span class="special-icon">⚽</span><div><div class="special-label">Miglior marcatore</div><div class="special-value">${sp.scorer?esc(sp.scorer):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${scorerPill}</div>
+    <div class="special-row"><span class="special-icon ms" style="color:var(--gold)">emoji_events</span><div><div class="special-label">Nazionale vincitrice</div><div class="special-value">${sp.winner?esc(sp.winner):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${winnerPill}</div>
+    <div class="special-row"><span class="special-icon ms">sports_soccer</span><div><div class="special-label">Miglior marcatore</div><div class="special-value">${sp.scorer?esc(sp.scorer):'<span style="color:var(--muted);font-style:italic;font-size:13px">Non inserito</span>'}</div></div>${scorerPill}</div>
   </div>`;
   cont.innerHTML=html;
 }
@@ -1018,7 +1081,7 @@ function renderLeaderboard() {
   if(!state.players.length){cont.innerHTML=`<div class="empty"><p>Nessun giocatore configurato.</p></div>`;return;}
   const hasReal=Object.keys(state.realStandings).length>0;
   let html='';
-  if(!hasReal) html+=`<div class="alert alert-warn">⚠ Classifiche reali non ancora disponibili. I punteggi mostrano 0 pt. Vai in ⚙ per sincronizzare o inserire manualmente.</div>`;
+  if(!hasReal) html+=`<div class="alert alert-warn"><span class="ms">warning</span> Classifiche reali non ancora disponibili. I punteggi mostrano 0 pt. Vai in <span class="ms">settings</span> per sincronizzare o inserire manualmente.</div>`;
   const scores=state.players.map(p=>({name:p,...calcScore(p)}));
   scores.sort((a,b)=>b.pts-a.pts||b.correct-a.correct);
   html+='<div class="leaderboard">';
@@ -1062,23 +1125,23 @@ function renderInsertForm() {
   let html='';
   // Banner gironi
   if(groupsLocked && !specialsLocked){
-    html += `<div class="alert alert-info">🔒 I pronostici dei <strong>gironi</strong> di ${esc(player)} sono bloccati. Puoi ancora inserire i <strong>pronostici speciali</strong> qui sotto. 👇</div>`;
+    html += `<div class="alert alert-info"><span class="ms">lock</span> I pronostici dei <strong>gironi</strong> di ${esc(player)} sono bloccati. Puoi ancora inserire i <strong>pronostici speciali</strong> qui sotto.</div>`;
   } else if(groupsLocked && specialsLocked){
-    html += `<div class="alert alert-info">🔒 <strong>${esc(player)}</strong> ha completato tutti i pronostici. Sono in sola lettura.</div>`;
+    html += `<div class="alert alert-info"><span class="ms">lock</span> <strong>${esc(player)}</strong> ha completato tutti i pronostici. Sono in sola lettura.</div>`;
   } else {
-    html += `<div class="alert alert-warn">✏️ Pronostici di <strong>${esc(player)}</strong>: le squadre sono già in ordine alfabetico — <strong>trascina ⠿ per riordinarle</strong>, poi salva. Una volta salvati non potranno più essere modificati.</div>`;
+    html += `<div class="alert alert-warn"><span class="ms">edit</span> Pronostici di <strong>${esc(player)}</strong>: le squadre sono già in ordine alfabetico — <strong>tieni premuto <span class="ms">drag_indicator</span> e trascina per riordinarle</strong>, poi salva. Una volta salvati non potranno più essere modificati.</div>`;
   }
 
   html+=`<div class="groups-grid" id="insert-grid">`;
   GROUPS.forEach(g=>{
     const raw=pred[g]||[];
     const teams=raw.every(t=>!t) ? (DEFAULT_STANDINGS[g]||['','','','']).slice() : raw;
-    html+=`<div class="insert-group-card" style="--gc:${GROUP_COLORS[g]}"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span>${groupsLocked?'<span style="margin-left:auto;font-size:13px">🔒</span>':''}</div><div class="insert-group-body">`;
+    html+=`<div class="insert-group-card" style="--gc:${groupColor(g)}"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span>${groupsLocked?'<span class="ms" style="margin-left:auto;font-size:15px">lock</span>':''}</div><div class="insert-group-body">`;
     for(let i=0;i<POSITIONS;i++){
       const v=teams[i]||'';
       const oninput = groupsLocked ? '' : `oninput="updatePredField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"`;
       const dragAttrs = groupsLocked ? '' : `draggable="true" data-group="${g}" data-pos="${i}" data-form="predict" ondragstart="rowDragStart(event,'predict')" ondragover="rowDragOver(event)" ondrop="rowDrop(event,'predict')" ondragend="rowDragEnd()"`;
-      const handle = groupsLocked ? '' : `<span class="drag-handle">⠿</span>`;
+      const handle = groupsLocked ? '' : `<span class="drag-handle ms">drag_indicator</span>`;
       html+=`<div class="insert-row" ${dragAttrs}>${handle}<div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" ${gDis} ${oninput} style="${groupsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>`;
     }
     html+='</div></div>';
@@ -1087,17 +1150,17 @@ function renderInsertForm() {
 
   // Card speciali
   html+=`<div class="card mt-16" style="max-width:560px">
-    <div class="card-title">Pronostici Speciali ${specialsLocked?'🔒':''}</div>
+    <div class="card-title">Pronostici Speciali ${specialsLocked?'<span class="ms">lock</span>':''}</div>
     <div class="row">
-      <div class="flex-1"><div class="label">🏆 Nazionale vincitrice</div><input type="text" id="sp-winner" placeholder="es. Brasile" value="${esc(sp.winner||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
-      <div class="flex-1"><div class="label">⚽ Miglior marcatore</div><input type="text" id="sp-scorer" placeholder="es. Mbappé" value="${esc(sp.scorer||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
+      <div class="flex-1"><div class="label"><span class="ms" style="color:var(--gold)">emoji_events</span> Nazionale vincitrice</div><input type="text" id="sp-winner" placeholder="es. Brasile" value="${esc(sp.winner||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
+      <div class="flex-1"><div class="label"><span class="ms">sports_soccer</span> Miglior marcatore</div><input type="text" id="sp-scorer" placeholder="es. Mbappé" value="${esc(sp.scorer||'')}" ${sDis} style="${specialsLocked?'opacity:0.7;cursor:not-allowed':''}"/></div>
     </div>
   </div>`;
 
   // Pulsanti salvataggio: separati per gironi e speciali
   const buttons = [];
-  if(!groupsLocked) buttons.push(`<button class="btn btn-primary mt-16" onclick="saveGroups()" style="width:100%;max-width:560px;padding:13px;font-size:15px">💾 Salva pronostici gironi di ${esc(player)}</button>`);
-  if(!specialsLocked) buttons.push(`<button class="btn btn-primary mt-12" onclick="saveSpecials()" style="width:100%;max-width:560px;padding:13px;font-size:15px">💾 Salva pronostici speciali di ${esc(player)}</button>`);
+  if(!groupsLocked) buttons.push(`<button class="btn btn-primary mt-16" onclick="saveGroups()" style="width:100%;max-width:560px;padding:13px;font-size:15px"><span class="ms">save</span> Salva pronostici gironi di ${esc(player)}</button>`);
+  if(!specialsLocked) buttons.push(`<button class="btn btn-primary mt-12" onclick="saveSpecials()" style="width:100%;max-width:560px;padding:13px;font-size:15px"><span class="ms">save</span> Salva pronostici speciali di ${esc(player)}</button>`);
   html += buttons.join('');
 
   cont.innerHTML=html;
@@ -1141,7 +1204,7 @@ function saveSpecials() {
 function renderSettings() {
   const pl=document.getElementById('players-list');
   if(!state.players.length){pl.innerHTML=`<p style="font-size:13px;color:var(--muted)">Nessun giocatore.</p>`;}
-  else{pl.innerHTML=`<div class="players-list">${state.players.map((p,i)=>`<div class="player-item"><span class="player-item-name">${esc(p)}</span>${!HARDCODED_PLAYERS.includes(p)?`<button class="btn btn-danger" style="padding:4px 10px;font-size:12px" onclick="removePlayer(${i})">✕</button>`:''}</div>`).join('')}</div>`;}
+  else{pl.innerHTML=`<div class="players-list">${state.players.map((p,i)=>`<div class="player-item"><span class="player-item-name">${esc(p)}</span>${!HARDCODED_PLAYERS.includes(p)?`<button class="btn btn-danger" style="padding:4px 10px;font-size:12px" onclick="removePlayer(${i})"><span class="ms">close</span></button>`:''}</div>`).join('')}</div>`;}
   document.getElementById('real-winner').value=state.realSpecials?.winner||'';
   document.getElementById('real-scorer').value=state.realSpecials?.scorer||'';
   renderManualStandingsForm();
@@ -1152,10 +1215,10 @@ function renderManualStandingsForm() {
   let html='<div class="groups-grid">';
   GROUPS.forEach(g=>{
     const rTeams=state.realStandings[g]||['','','',''];
-    html+=`<div class="insert-group-card" style="--gc:${GROUP_COLORS[g]}"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span></div><div class="insert-group-body">`;
+    html+=`<div class="insert-group-card" style="--gc:${groupColor(g)}"><div class="insert-group-header"><span class="group-letter">${esc(g)}</span><span style="font-size:13px;font-weight:600;color:var(--muted2)">GIRONE</span></div><div class="insert-group-body">`;
     for(let i=0;i<POSITIONS;i++){
       const v=rTeams[i]||'';
-      html+=`<div class="insert-row" draggable="true" data-group="${g}" data-pos="${i}" data-form="manual" ondragstart="rowDragStart(event,'manual')" ondragover="rowDragOver(event)" ondrop="rowDrop(event,'manual')" ondragend="rowDragEnd()"><span class="drag-handle">⠿</span><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" oninput="updateManualField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"/></div>`;
+      html+=`<div class="insert-row" draggable="true" data-group="${g}" data-pos="${i}" data-form="manual" ondragstart="rowDragStart(event,'manual')" ondragover="rowDragOver(event)" ondrop="rowDrop(event,'manual')" ondragend="rowDragEnd()"><span class="drag-handle ms">drag_indicator</span><div class="insert-pos">${i+1}</div><span class="insert-flag" style="min-width:22px;display:inline-flex;justify-content:center">${flagImg(v,13)}</span><input type="text" placeholder="Nazionale…" value="${esc(v)}" data-group="${g}" data-pos="${i}" oninput="updateManualField(this);this.previousElementSibling.innerHTML=flagImg(this.value,13)"/></div>`;
     }
     html+='</div></div>';
   });
@@ -1244,10 +1307,15 @@ async function fetchStandings() {
     const rows = entries.map(e => {
       const stats = e.stats || [];
       const find = n => { const s = stats.find(x => x.name === n); return s ? Number(s.value) : null; };
-      return { name: (e.team && (e.team.displayName || e.team.name)) || '', rank: find('rank'), points: find('points') };
+      return {
+        name: (e.team && (e.team.displayName || e.team.name)) || '',
+        rank: find('rank'), points: find('points'),
+        gp: find('gamesPlayed'), w: find('wins'), d: find('ties'), l: find('losses'),
+        gf: find('pointsFor'), ga: find('pointsAgainst'), gd: find('pointDifferential')
+      };
     });
     rows.sort((a, b) => a.rank != null && b.rank != null ? a.rank - b.rank : (b.points||0) - (a.points||0));
-    standings.push({ group: 'GROUP_' + letter, table: rows.map(r => ({ team: { name: r.name } })) });
+    standings.push({ group: 'GROUP_' + letter, table: rows.map(r => ({ team: { name: r.name }, stats: r })) });
   }
   if (!standings.length) throw new Error('Nessun girone disponibile');
   return { standings };
@@ -1255,9 +1323,9 @@ async function fetchStandings() {
 
 async function testAndFetch(silent) {
   const badge=document.getElementById('api-status');
-  if(badge){badge.className='api-status-badge status-idle';badge.textContent='⏳ Sincronizzazione...';}
+  if(badge){badge.className='api-status-badge status-idle';badge.innerHTML='<span class="ms">hourglass_empty</span> Sincronizzazione...';}
   try {
-    const data = await fetchStandings();
+    const data = await getLiveData(true); // forza il refresh e condivide la cache con la sezione Live
     const standings={};
     (data.standings||[]).forEach(group=>{
       const raw=group.group||group.stage||'?';
@@ -1272,16 +1340,117 @@ async function testAndFetch(silent) {
     state.lastSync = new Date().toISOString();
     patch('realStandings', { realStandings: state.realStandings });
     const src=data.source?` (fonte: ${data.source})`:'';
-    if(badge){badge.className='api-status-badge status-ok';badge.textContent=`✓ ${n} gironi sincronizzati${src}`;}
+    if(badge){badge.className='api-status-badge status-ok';badge.innerHTML=`<span class="ms">check</span> ${n} gironi sincronizzati${src}`;}
     if(!silent) toast(`${n} gironi caricati`);
     if(document.getElementById('manual-standings-form')) renderManualStandingsForm();
     // aggiorna le viste se l'utente le sta guardando
     if(document.getElementById('screen-overview').classList.contains('active')) renderOverview();
     if(document.getElementById('screen-classifica').classList.contains('active')) renderLeaderboard();
   } catch(e){
-    if(badge){badge.className='api-status-badge status-err';badge.textContent=`✗ ${e.message}`;}
+    if(badge){badge.className='api-status-badge status-err';badge.innerHTML=`<span class="ms">close</span> ${esc(e.message)}`;}
     if(!silent) toast(e.message,false);
   }
+}
+
+// ── LIVE: classifiche complete + partite del giorno (fonte ESPN) ──────────────
+let _liveData = null;     // { data, ts } cache classifiche con statistiche
+let _matchesCache = null; // partite di oggi
+
+async function getLiveData(force) {
+  if (!force && _liveData && Date.now() - _liveData.ts < 60000) return _liveData.data;
+  const data = await fetchStandings();
+  _liveData = { data, ts: Date.now() };
+  return data;
+}
+
+async function renderLive() {
+  const cont = document.getElementById('live-content');
+  if (!cont) return;
+  cont.innerHTML = `<div class="empty"><p><span class="ms">hourglass_empty</span> Caricamento classifiche live…</p></div>`;
+  let data;
+  try { data = await getLiveData(); }
+  catch(e) {
+    cont.innerHTML = `<div class="alert alert-warn"><span class="ms">warning</span> Impossibile caricare le classifiche live: ${esc(e.message)}</div>`;
+    return;
+  }
+  const byLetter = {};
+  (data.standings||[]).forEach(s => { byLetter[s.group.replace(/^.*_/,'')] = s.table; });
+  let html = '<div class="groups-grid">';
+  GROUPS.forEach(g => {
+    const table = byLetter[g];
+    if (!table) return;
+    html += `<div class="group-card" style="--gc:${groupColor(g, mapApiName(table[0].team.name))}"><div class="group-card-header"><span class="group-letter">${esc(g)}</span></div><div class="group-card-body" style="padding:4px 10px 10px">
+      <table class="live-table"><thead><tr><th></th><th></th><th>PG</th><th>V</th><th>N</th><th>P</th><th>GF</th><th>GS</th><th>DR</th><th>PT</th></tr></thead><tbody>`;
+    table.forEach((r, i) => {
+      const name = mapApiName(r.team.name);
+      const s = r.stats || {};
+      const v = x => (x === null || x === undefined) ? '–' : x;
+      html += `<tr><td style="color:rgba(255,255,255,0.7)">${i+1}</td><td class="lt-team">${flagImg(name,12)} ${esc(name)}</td><td>${v(s.gp)}</td><td>${v(s.w)}</td><td>${v(s.d)}</td><td>${v(s.l)}</td><td>${v(s.gf)}</td><td>${v(s.ga)}</td><td>${v(s.gd)}</td><td class="lt-pts">${v(s.points)}</td></tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+  html += '</div>';
+  const when = new Date(_liveData.ts).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+  cont.innerHTML = `<div class="label" style="margin-bottom:10px">Classifiche in tempo reale · fonte ESPN · aggiornate alle ${when}</div>` + html;
+}
+
+async function fetchTodayMatches() {
+  const d = new Date();
+  const ymd = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${ymd}`);
+  if (!res.ok) throw new Error('HTTP '+res.status);
+  const data = await res.json();
+  return (data.events||[]).map(ev => {
+    const comp = (ev.competitions||[])[0] || {};
+    const cs = comp.competitors || [];
+    const home = cs.find(c=>c.homeAway==='home') || cs[0] || {};
+    const away = cs.find(c=>c.homeAway==='away') || cs[1] || {};
+    const st = (ev.status && ev.status.type) || {};
+    return {
+      date: ev.date,
+      state: st.state || 'pre', // pre | in | post
+      clock: (ev.status && ev.status.displayClock) || '',
+      home: mapApiName((home.team && home.team.displayName) || ''),
+      away: mapApiName((away.team && away.team.displayName) || ''),
+      hs: home.score, as: away.score,
+      venue: comp.venue ? (comp.venue.fullName || '') : '',
+      city: (comp.venue && comp.venue.address && comp.venue.address.city) || ''
+    };
+  });
+}
+
+// Mostra le partite di oggi in home; al caricamento dell'app i risultati
+// vengono riletti da ESPN, quindi le partite finite mostrano il punteggio finale.
+async function renderTodayMatches(force) {
+  const cont = document.getElementById('today-matches');
+  if (!cont) return;
+  if (force) _matchesCache = null;
+  let matches;
+  try { matches = _matchesCache || (_matchesCache = await fetchTodayMatches()); }
+  catch(e) { cont.innerHTML = ''; return; }
+  if (!matches.length) { cont.innerHTML = ''; return; }
+  let h = `<div class="card mb-16"><div class="card-title"><span class="ms">sports_soccer</span> Partite di oggi</div>`;
+  matches.forEach(m => {
+    const time = new Date(m.date).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    let center;
+    if (m.state === 'in') {
+      center = `<div class="match-score">${esc(m.hs??'0')} – ${esc(m.as??'0')}</div><div class="live-dot">LIVE ${esc(m.clock)}</div>`;
+    } else if (m.state === 'post') {
+      center = `<div class="match-score">${esc(m.hs??'')} – ${esc(m.as??'')}</div><div class="match-meta">Finale</div>`;
+    } else {
+      center = `<div class="match-time">${time}</div><div class="match-meta">Calcio d'inizio</div>`;
+    }
+    h += `<div class="match-block">
+      <div class="match-row">
+        <div class="match-team">${flagImg(m.home,16)}<span>${esc(m.home)}</span></div>
+        <div class="match-center">${center}</div>
+        <div class="match-team right"><span>${esc(m.away)}</span>${flagImg(m.away,16)}</div>
+      </div>
+      <div class="match-venue"><span class="ms">location_on</span> ${esc(m.venue)}${m.city?' · '+esc(m.city):''} · <span class="ms">schedule</span> ${time}</div>
+    </div>`;
+  });
+  h += `</div>`;
+  cont.innerHTML = h;
 }
 
 // ── DRAG & DROP ───────────────────────────────────────────────────────────────
@@ -1337,18 +1506,37 @@ function swapRows(formType, group, from, to) {
   }
 }
 
+// Su touch il drag parte solo dopo una pressione prolungata (350ms):
+// uno swipe rapido scorre la pagina senza spostare le righe.
+const LONG_PRESS_MS = 350;
 function initTouchDrag() {
   document.querySelectorAll('.insert-row[draggable="true"]').forEach(row => {
     if (row._td) return;
     row._td = true;
-    row.addEventListener('touchstart', () => {
-      _touchDrag = { group: row.dataset.group, pos: parseInt(row.dataset.pos), formType: row.dataset.form, targetRow: null };
-      row.classList.add('dragging');
-    }, { passive: true });
-    row.addEventListener('touchmove', e => {
-      if (!_touchDrag) return;
-      e.preventDefault();
+    let timer = null, startX = 0, startY = 0;
+
+    row.addEventListener('touchstart', e => {
+      if (e.target.tagName === 'INPUT') return; // long-press sull'input = selezione testo
       const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      timer = setTimeout(() => {
+        timer = null;
+        _touchDrag = { group: row.dataset.group, pos: parseInt(row.dataset.pos), formType: row.dataset.form, targetRow: null };
+        row.classList.add('dragging');
+        if (navigator.vibrate) navigator.vibrate(25);
+      }, LONG_PRESS_MS);
+    }, { passive: true });
+
+    row.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      if (!_touchDrag) {
+        // long-press non ancora scattato: se il dito si muove è uno scroll → annulla
+        if (timer && (Math.abs(t.clientX - startX) > 8 || Math.abs(t.clientY - startY) > 8)) {
+          clearTimeout(timer); timer = null;
+        }
+        return;
+      }
+      e.preventDefault();
       document.querySelectorAll('.insert-row.drag-over').forEach(el => el.classList.remove('drag-over'));
       const hit = document.elementFromPoint(t.clientX, t.clientY);
       const target = hit && hit.closest('.insert-row[draggable="true"]');
@@ -1357,15 +1545,18 @@ function initTouchDrag() {
         _touchDrag.targetRow = target;
       } else { _touchDrag.targetRow = null; }
     }, { passive: false });
-    row.addEventListener('touchend', () => {
+
+    const endDrag = () => {
+      if (timer) { clearTimeout(timer); timer = null; }
       if (_touchDrag && _touchDrag.targetRow) {
         swapRows(_touchDrag.formType, _touchDrag.group, _touchDrag.pos, parseInt(_touchDrag.targetRow.dataset.pos));
-      } else {
-        document.querySelectorAll('.insert-row.dragging, .insert-row.drag-over').forEach(el =>
-          el.classList.remove('dragging', 'drag-over'));
-        _touchDrag = null;
       }
-    });
+      document.querySelectorAll('.insert-row.dragging, .insert-row.drag-over').forEach(el =>
+        el.classList.remove('dragging', 'drag-over'));
+      _touchDrag = null;
+    };
+    row.addEventListener('touchend', endDrag);
+    row.addEventListener('touchcancel', endDrag);
   });
 }
 
@@ -1377,6 +1568,7 @@ function refreshCurrentScreen() {
   const id = active ? active.id : 'screen-overview';
   if (id === 'screen-overview') renderOverview();
   else if (id === 'screen-classifica') renderLeaderboard();
+  else if (id === 'screen-live') renderLive();
   else if (id === 'screen-inserimento') renderInsertForm();
   else if (id === 'screen-settings') renderSettings();
 }
@@ -1393,8 +1585,9 @@ loadFromServer().then(() => refreshCurrentScreen());
 // 3. Connetti SSE per push in tempo reale
 connectSSE();
 
-// 4. Sync classifiche API (silenziosa)
+// 4. Sync classifiche API (silenziosa) + partite del giorno con risultati aggiornati
 testAndFetch(true);
+renderTodayMatches();
 
 // 5. Registra il service worker (PWA installabile)
 if ('serviceWorker' in navigator) {
@@ -1406,6 +1599,8 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
     loadFromServer().then(changed => { if (changed) refreshCurrentScreen(); });
     if (!_evtSource || _evtSource.readyState === EventSource.CLOSED) connectSSE();
+    renderTodayMatches(true); // rilegge i risultati: le partite finite mostrano il finale
+    testAndFetch(true);
   }
 });
 </script>
