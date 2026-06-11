@@ -57,9 +57,9 @@
   .header { background: var(--surface2); border-bottom: none; padding: 0 24px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; box-shadow: 0 4px 20px rgba(0,0,30,0.25); }
   /* Wordmark FWC26: SVG ufficiale vettorializzato, bianco su sfondo trasparente */
   .header-title { padding: 10px 0; flex: 0 0 auto; margin-right: 32px; display: flex; align-items: center; gap: 12px; background: transparent; }
-  .wc-wordmark { height: 15px; width: auto; display: block; }
-  /* Logo ufficiale WC26 su badge nero: fa risaltare il bianco del "26" */
-  .wc-logo-img { height: 42px; width: auto; background: #000; border-radius: 10px; padding: 4px 8px; box-shadow: 0 2px 10px rgba(0,0,40,0.35); flex: 0 0 auto; }
+  .wc-wordmark { height: 19px; width: auto; display: block; }
+  /* Logo ufficiale WC26: sfondo uguale all'header, nessun badge */
+  .wc-logo-img { height: 42px; width: auto; background: transparent; flex: 0 0 auto; }
   .nav { display: flex; gap: 6px; flex: 1; }
   .nav-btn { padding: 8px 18px; background: transparent; border: none; color: var(--muted2); font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px; transition: all 0.2s; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
   .nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); }
@@ -217,8 +217,8 @@
     /* Header compatto: solo titolo + ingranaggio */
     .header { padding: 10px 16px; justify-content: space-between; }
     .header-title { margin-right: 0; padding: 6px 0; gap: 10px; }
-    .wc-wordmark { height: 13px; }
-    .wc-logo-img { height: 36px; border-radius: 8px; }
+    .wc-wordmark { height: 16px; }
+    .wc-logo-img { height: 36px; }
 
     /* La nav superiore diventa una bottom tab bar fissa */
     .nav {
@@ -289,7 +289,7 @@
   /* ===== MOBILE PICCOLO (≤360px) ===== */
   @media (max-width: 360px) {
     .header-title { gap: 8px; }
-    .wc-wordmark { height: 11px; }
+    .wc-wordmark { height: 13px; }
     .wc-logo-img { height: 32px; }
     .nav-btn .nav-label { font-size: 9px; }
     .standing-team { font-size: 14px; }
