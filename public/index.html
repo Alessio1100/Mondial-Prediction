@@ -162,11 +162,17 @@
   .chip:hover { color: #fff; }
   .chip.active { background: #fff; color: var(--surface2); box-shadow: 0 2px 12px rgba(0,0,30,0.35); }
   .chips-select { display: none !important; }
-  /* Tabella classifiche live (sezione Live) */
-  .live-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-  .live-table th { font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; color: rgba(255,255,255,0.65); padding: 3px 2px; text-align: center; text-transform: uppercase; }
-  .live-table td { padding: 5px 2px; text-align: center; color: #fff; border-top: 1px solid rgba(255,255,255,0.12); }
-  .live-table .lt-team { text-align: left; font-weight: 700; text-transform: uppercase; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+  /* Tabella classifiche live (sezione Live).
+     table-layout fixed: le colonne numeriche hanno larghezza fissa ancorata
+     al bordo destro della card, identica in tutti i gironi. */
+  .live-table { width: 100%; border-collapse: collapse; font-size: 11.5px; table-layout: fixed; }
+  .live-table th:first-child { width: 16px; }
+  .live-table th:nth-child(n+3) { width: 22px; }
+  .live-table th { font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; color: rgba(255,255,255,0.65); padding: 3px 1px; text-align: center; text-transform: uppercase; }
+  .live-table td { padding: 5px 1px; text-align: center; color: #fff; border-top: 1px solid rgba(255,255,255,0.12); overflow: hidden; }
+  .live-table .lt-team { text-align: left; font-weight: 700; text-transform: uppercase; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Card più larghe per dare spazio alle 8 colonne numeriche */
+  .live-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
   .live-table td.lt-pts { font-weight: 800; color: var(--gold); }
   .live-table img { border-radius: 50%; width: 14px !important; height: 14px !important; object-fit: cover; vertical-align: -2px; box-shadow: 0 0 0 1px rgba(255,255,255,0.45); }
   /* Partite del giorno */
